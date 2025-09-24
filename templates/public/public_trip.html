@@ -58,7 +58,6 @@
 }
 
 .carbon-icon {
-  color: #28a745;
   font-size: 0.9em;
 }
 
@@ -107,15 +106,6 @@ var redGreenIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-function formatCarbonFootprint(carbon, langId) {
-  if (carbon < 0.1) {
-    return "< 0.1 kg CO₂eq";
-  } else if (carbon < 1) {
-    return carbon.toFixed(1) + " kg CO₂eq";
-  } else {
-    return carbon.toFixed(0) + " kg CO₂eq";
-  }
-}
 
 function buildItinerary(trips, prices){
   var total_length_per_type = {};
@@ -365,11 +355,7 @@ if (operatorContents.length) {
     }
 {% endif %}
 
-    var formattedCarbon = null;
-    if (trip.trip.carbon_footprint && trip.trip.carbon_footprint > 0) {
-      formattedCarbon = `<div class="popupInfo carbon_popupInfo" popupinfo_content="${formatCarbonFootprint(trip.trip.carbon_footprint, "{{langId}}")}"><i class="fas fa-leaf carbon-icon"></i></div>`;
-    }
-  
+    var formattedCarbon = createCarbonInfo(trip.trip.carbon_footprint, trip.trip.trip_length, "{{langId}}");
     $('#itinerary').append(
   $('<li>').append(
     $('<time>').addClass(trip.trip.type).attr("datetime", trip.trip.start_time).html(startTimeDisplay)
@@ -648,6 +634,22 @@ $.post({
     console.error("Error:", error);
   }
 });
+
+function createCarbonInfo(carbonFootprint, tripLength, langId) {
+  if (!carbonFootprint || carbonFootprint <= 0) {
+    return null;
+  }
+  
+  const co2PerKm = calculateCO2PerKm(carbonFootprint, tripLength);
+  const color = getCarbonColor(co2PerKm);
+  const totalCarbonText = formatCarbonFootprint(carbonFootprint, langId);
+  const co2PerKmText = formatCO2PerKm(co2PerKm, langId);
+  const tooltipText = `${totalCarbonText} (${co2PerKmText})`;
+  
+  return `<div class="popupInfo carbon_popupInfo" popupinfo_content="${tooltipText}">
+            <i class="fas fa-leaf carbon-icon" style="color: ${color};"></i>
+          </div>`;
+}
 
 </script>
 

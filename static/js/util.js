@@ -980,3 +980,81 @@ function renderOperators(data, type, row) {
     // Fallback to operator name
     return row.operator;
 }
+
+// Function to calculate CO2 per kilometer
+function calculateCO2PerKm(carbonFootprint, tripLength) {
+  if (!carbonFootprint || !tripLength || tripLength <= 0) {
+    return 0;
+  }
+  return carbonFootprint / (tripLength / 1000); // Convert meters to kilometers
+}
+
+// Function to interpolate between two colors
+function interpolateColor(color1, color2, factor) {
+  const rgb1 = hexToRgb(color1);
+  const rgb2 = hexToRgb(color2);
+  
+  const r = Math.round(rgb1.r + (rgb2.r - rgb1.r) * factor);
+  const g = Math.round(rgb1.g + (rgb2.g - rgb1.g) * factor);
+  const b = Math.round(rgb1.b + (rgb2.b - rgb1.b) * factor);
+  
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+// Helper function to convert hex to RGB
+function hexToRgb(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
+
+// Function to get carbon color based on CO2/km
+function getCarbonColor(co2PerKm) {
+  // Define color stops: Green -> Yellow -> Orange -> Red -> Black
+  const colors = ['#28a745', '#ffc107', '#fd7e14', '#dc3545', '#000000'];
+  const thresholds = [0, 0.05, 0.15, 0.25, 0.4]; // kg CO2/km thresholds
+  
+  // Handle edge cases
+  if (co2PerKm <= thresholds[0]) return colors[0]; // Green
+  if (co2PerKm >= thresholds[thresholds.length - 1]) return colors[colors.length - 1]; // Black
+  
+  // Find which segment the value falls into
+  for (let i = 0; i < thresholds.length - 1; i++) {
+    if (co2PerKm >= thresholds[i] && co2PerKm <= thresholds[i + 1]) {
+      // Calculate interpolation factor (0-1)
+      const factor = (co2PerKm - thresholds[i]) / (thresholds[i + 1] - thresholds[i]);
+      return interpolateColor(colors[i], colors[i + 1], factor);
+    }
+  }
+  
+  return colors[colors.length - 1]; // Default to black for very high values
+}
+
+function formatCarbonValue(value, unit = '') {
+  if (value < 1) {
+    const grams = value * 1000;
+    if (grams < 1) {
+      return `< 1 g CO₂eq${unit}`;
+    }
+    return `${grams.toFixed(0)} g CO₂eq${unit}`;
+  }
+  
+  if (value < 10) {
+    return `${value.toFixed(1)} kg CO₂eq${unit}`;
+  }
+  
+  return `${value.toFixed(0)} kg CO₂eq${unit}`;
+}
+
+// Function to format CO2/km for display
+function formatCO2PerKm(co2PerKm, langId) {
+  return formatCarbonValue(co2PerKm, '/km');
+}
+
+// Function to format total carbon footprint
+function formatCarbonFootprint(carbon, langId) {
+  return formatCarbonValue(carbon);
+}

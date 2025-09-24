@@ -19,6 +19,11 @@ def load_train_emissions(filepath=None):
 TRAIN_FACTORS = load_train_emissions()
 FLIGHT_CATEGORIES, AIRCRAFT_CATEGORY_CO2 = load_aircraft_emissions()
 
+# Constants for train energy consumption and emissions
+ELECTRIC_TRAIN_KWH_PER_KM = 0.04  # kWh per passenger-km for electric trains
+DIESEL_TRAIN_LITERS_PER_KM = 0.015  # liters per passenger-km for diesel trains
+DIESEL_CO2_KG_PER_LITER = 2.65  # kg CO2 per liter of diesel
+
 EMISSION_FACTORS = {
     'bus': {'construction': 4.42, 'fuel': 25.0, 'infrastructure': 0.7},
     'car': {'construction': 25.6, 'fuel': 192.0, 'infrastructure': 0.7, 'additional_passenger_factor': 0.04},
@@ -77,34 +82,82 @@ def calculate_air_emissions(distance_km, path_points, aircraft_code=''):
     cat = 'short' if distance_km < 1000 else ('medium' if distance_km < 3500 else 'long')
     return distance_km * f[cat]['base_co2_per_km'] * f['non_co2_factor']
 
-def _split_km_for_country(cc, value_m):
+def split_km_for_country(cc, value_m):
+    """Split distance into electric and diesel kilometers based on country's diesel share"""
     if isinstance(value_m, dict):
+        # If already split, convert from meters to km
         e_km = (value_m.get('electric_m', 0) or 0) / 1000
         d_km = (value_m.get('diesel_m', 0) or 0) / 1000
         return e_km, d_km
+    
+    # Convert total meters to km
     total_km = (value_m or 0) / 1000
-    diesel_share = TRAIN_FACTORS.get(cc, TRAIN_FACTORS['default']).get('diesel_share', TRAIN_FACTORS['default']['diesel_share'])
-    d_km = total_km * diesel_share
-    return total_km - d_km, d_km
+    
+    # Get diesel share for this country (default if not found)
+    diesel_share = TRAIN_FACTORS.get(cc, TRAIN_FACTORS['default'])['diesel_share']
+    
+    # Calculate diesel and electric km
+    diesel_km = total_km * diesel_share
+    electric_km = total_km - diesel_km
+    
+    return electric_km, diesel_km
 
 def calculate_train_emissions(distance_km, countries, force_electric=False):
+    """
+    Calculate train CO2 emissions in kg CO2e
+    
+    Args:
+        distance_km: Total distance (not used when countries dict provided)
+        countries: Dict of country codes and distances, or JSON string
+        force_electric: If True, treat all trains as electric
+    
+    Returns:
+        float: Total CO2 emissions in kg CO2e
+    """
+    # Handle case where no countries specified - use default values
     if not countries:
-        g = TRAIN_FACTORS['default']
-        return distance_km * (g['infrastructure'] + g['manufacturing'] + g['electric_upstream']) / 1000
+        factors = TRAIN_FACTORS['default']
+        electric_km = distance_km
+        diesel_km = 0 if force_electric else distance_km * factors['diesel_share']
+        electric_km = distance_km - diesel_km if not force_electric else distance_km
+        
+        # Calculate emissions
+        electric_emissions = electric_km * ELECTRIC_TRAIN_KWH_PER_KM * factors['grid_intensity_g_per_kwh'] / 1000
+        diesel_emissions = diesel_km * DIESEL_TRAIN_LITERS_PER_KM * DIESEL_CO2_KG_PER_LITER
+        
+        return electric_emissions + diesel_emissions
+    
+    # Parse countries if it's a JSON string
     if isinstance(countries, str):
-        try: countries = json.loads(countries)
-        except: countries = {}
-
-    total = 0.0
-    for cc, val in countries.items():
-        g = TRAIN_FACTORS.get(cc, TRAIN_FACTORS['default'])
-        e_km, d_km = _split_km_for_country(cc, val)
+        try:
+            countries = json.loads(countries)
+        except:
+            countries = {}
+    
+    total_emissions = 0.0
+    
+    # Process each country
+    for country_code, distance_value in countries.items():
+        # Get country-specific factors (or default)
+        factors = TRAIN_FACTORS.get(country_code, TRAIN_FACTORS['default'])
+        
+        # Split into electric and diesel kilometers
+        electric_km, diesel_km = split_km_for_country(country_code, distance_value)
+        
+        # Force all to electric if requested
         if force_electric:
-            e_km, d_km = e_km + d_km, 0.0
-        km = e_km + d_km
-        total += km * g['infrastructure'] + km * g['manufacturing']
-        total += e_km * g['electric_upstream'] + d_km * g['diesel_fuel']
-    return total / 1000
+            electric_km += diesel_km
+            diesel_km = 0
+        
+        # Calculate electric train emissions (grid electricity)
+        electric_emissions = electric_km * ELECTRIC_TRAIN_KWH_PER_KM * factors['grid_intensity_g_per_kwh'] / 1000
+        
+        # Calculate diesel train emissions (direct fuel combustion)
+        diesel_emissions = diesel_km * DIESEL_TRAIN_LITERS_PER_KM * DIESEL_CO2_KG_PER_LITER
+        
+        total_emissions += electric_emissions + diesel_emissions
+    
+    return total_emissions
 
 def calculate_bus_emissions(distance_km):
     g = EMISSION_FACTORS['bus']
