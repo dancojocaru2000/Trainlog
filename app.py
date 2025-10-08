@@ -3659,7 +3659,7 @@ def render_public_trip_page(
             if (
                 not session.get(user.username)
                 and not user.is_public_trips()
-                and not session.get("owner")
+                and not session.get(owner)
             ):
                 abort(401)
         else:
