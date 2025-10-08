@@ -3538,6 +3538,35 @@ def borked_trips(username=None):
                 }
             )
 
+@app.route("/admin/add_dummy_path/<trip_id>", methods=["GET"])
+@owner_required
+def add_dummy_path(trip_id):
+    with managed_cursor(pathConn) as path_cursor:
+        # Check if trip already has a path
+        path_cursor.execute(
+            "SELECT COUNT(*) as count FROM paths WHERE trip_id = ?",
+            (trip_id,)
+        )
+        existing = path_cursor.fetchone()["count"]
+        
+        if existing > 0:
+            return jsonify({
+                "success": False,
+                "message": "Trip already has a path"
+            }), 400
+        
+        # Insert dummy path
+        dummy_path_data = "[[0,0],[1,1]]"
+        path_cursor.execute(
+            "INSERT INTO paths (trip_id, path) VALUES (?, ?)",
+            (trip_id, dummy_path_data)
+        )
+        pathConn.commit()
+        
+        return jsonify({
+            "success": True,
+            "message": f"Dummy path added to trip {trip_id}"
+        })
 
 def listOperatorsLogos(tripType=None):
     """
@@ -6238,15 +6267,10 @@ def edit_copy_trip(username, tripId, edit_copy_type):
     )
     with managed_cursor(mainConn) as cursor:
         trip = cursor.execute(getTrip, {"trip_id": tripId}).fetchone()
-
-    if not trip:
-        abort(404)
     with managed_cursor(pathConn) as cursor:
-        rawPath = cursor.execute(formattedGetUserLines, (tripId,)).fetchone()
-        if rawPath:
-            path = json.loads(list(rawPath)[1])
-        else:
-            path = [[0,0],[1,1]]
+        path = json.loads(
+            list(cursor.execute(formattedGetUserLines, (tripId,)).fetchone())[1]
+        )
     user = User.query.filter_by(username=trip["username"]).first()
     if not (session.get(user.username) or session.get(owner)):
         abort(401)
