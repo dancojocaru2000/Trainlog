@@ -3450,10 +3450,10 @@ def public_new(username):
     user = User.query.filter_by(username=getUser()).first()
     if user is not None:
         tileserver = (user.tileserver,)
-        globe = (user.globe,)
+        globe = user.globe
     else:
         tileserver = ("default",)
-        globe = (False,)
+        globe = False
 
     return render_template(
         "new_map.html",
