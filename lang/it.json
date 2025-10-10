@@ -619,5 +619,6 @@
     "powerType": "Tipo di alimentazione",
     "useOldRouter": "Passa al motore di routing classico",
     "useNewRouter": "Prova il nuovo router (mostra l'elettrificazione)",
-    "news": "Notizie Trainlog"
+    "news": "Notizie Trainlog",
+    "CO2": "CO₂"
 }

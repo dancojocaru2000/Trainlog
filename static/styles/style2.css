@@ -1332,12 +1332,6 @@ html, body {
   vertical-align: middle;
 }
 
-#leaderboard th {
-  color: black;
-  background-color: #f2f2f2;
-  border-top: 1px solid #dddddd !important;
-}
-
 #leaderboard tr.highlight > td,
 #leaderboard tr.highlight + tr.child > td:not(:has(table)) { /* we don't want to highlight childs that contain another table */
   color: white;

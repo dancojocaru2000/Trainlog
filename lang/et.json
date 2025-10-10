@@ -619,5 +619,6 @@
     "powerType": "Võimaluse tüüp",
     "useOldRouter": "Lülita klassikalisele marsruutimismootorile",
     "useNewRouter": "Proovi uut ruuterit (kuvab elektrifitseerimist)",
-    "news": "Trainlog Uudised"
+    "news": "Trainlog Uudised",
+    "CO2": "CO₂"
 }

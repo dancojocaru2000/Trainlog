@@ -619,5 +619,6 @@
     "powerType": "Krafttype",
     "useOldRouter": "Bytt til klassisk rutemotor",
     "useNewRouter": "Prøv ny ruter (viser elektrifisering)",
-    "news": "Trainlog Nyheter"
+    "news": "Trainlog Nyheter",
+    "CO2": "CO₂"
 }

@@ -619,5 +619,6 @@
     "powerType": "Tipo de potência",
     "useOldRouter": "Mudar para o motor de roteamento clássico",
     "useNewRouter": "Experimente o novo roteador (mostra eletrificação)",
-    "news": "Notícias do Trainlog"
+    "news": "Notícias do Trainlog",
+    "CO2": "CO₂"
 }

@@ -619,5 +619,6 @@
     "powerType": "Power type",
     "useOldRouter": "Switch to classic routing engine",
     "useNewRouter": "Try new router (shows electrification)",
-    "news": "Trainlog News"
+    "news": "Trainlog News",
+    "CO2": "CO₂"
 }

@@ -619,5 +619,6 @@
     "powerType": "Teljesítménytípus",
     "useOldRouter": "Váltás a klasszikus útvonalmotorra",
     "useNewRouter": "Próbálja ki az új útválasztót (mutatja az elektromos hálózatot)",
-    "news": "Trainlog Hírek"
+    "news": "Trainlog Hírek",
+    "CO2": "CO₂"
 }

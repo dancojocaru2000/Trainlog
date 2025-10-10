@@ -1,57 +1,170 @@
-<div class="d-flex justify-content-center">    
-    <div class="btn-group d-none d-md-inline-flex">
-        <a href="{{ url_for('leaderboard', type='all') }}" class="btn {{ 'btn-info' if type == 'all' else 'btn-secondary' }}">
-            {{ leaderboardTotal }}
-        </a>
-        <a href="{{ url_for('leaderboard', type='train') }}" class="btn {{ 'btn-info' if type == 'train' else 'btn-secondary' }}">
-            {{ train }}
-        </a>
-        <a href="{{ url_for('leaderboard', type='bus') }}" class="btn {{ 'btn-info' if type == 'bus' else 'btn-secondary' }}">
-            {{ bus }}
-        </a>
-        <a href="{{ url_for('leaderboard', type='air') }}" class="btn {{ 'btn-info' if type == 'air' else 'btn-secondary' }}">
-            {{ air }}
-        </a>
-        <a href="{{ url_for('leaderboard', type='ferry') }}" class="btn {{ 'btn-info' if type == 'ferry' else 'btn-secondary' }}">
-            {{ ferry }}
-        </a>  
-        <a href="{{ url_for('leaderboard', type='aerialway') }}" class="btn {{ 'btn-info' if type == 'aerialway' else 'btn-secondary' }}">
-            {{ aerialway }}
-        </a>
-        <a href="{{ url_for('leaderboard', type='metro') }}" class="btn {{ 'btn-info' if type == 'metro' else 'btn-secondary' }}">
-            {{ metro }}
-        </a>
-        <a href="{{ url_for('leaderboard', type='tram') }}" class="btn {{ 'btn-info' if type == 'tram' else 'btn-secondary' }}">
-            {{ tram }}
-        </a>
-        <a href="{{ url_for('leaderboard', type='train_countries') }}" class="btn {{ 'btn-info' if type == 'train_countries' else 'btn-secondary' }}">
-            {{ leaderboardTrainCountries }}
-        </a>
-        <a href="{{ url_for('leaderboard', type='world_squares') }}" class="btn {{ 'btn-info' if type == 'world_squares' else 'btn-secondary' }}">
-            {{worldSquares}}
-        </a>        
-        <a href="{{ url_for('leaderboard', type='countries') }}" class="btn {{ 'btn-info' if type == 'countries' else 'btn-secondary' }}">
-            {{crossedCountries}}
-        </a>
-    </div>
+<div class="leaderboard-switcher text-center my-3">
+  <!-- Desktop / tablet -->
+  <div class="d-none d-md-flex justify-content-center flex-wrap gap-2">
+    <a href="{{ url_for('leaderboard', type='all') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'all' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'all' else 'false' }}"
+       title="{{ leaderboardTotal }}">
+      {{ leaderboardTotal }}
+    </a>
 
-    <!-- This will be visible on smaller screens -->
-    <div class="dropdown d-md-none">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ leaderboardSelectType }}
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a href="{{ url_for('leaderboard', type='all') }}" class="dropdown-item">{{ leaderboardTotal }}</a></li>
-            <li><a href="{{ url_for('leaderboard', type='train') }}" class="dropdown-item">{{ train }}</a></li>
-            <li><a href="{{ url_for('leaderboard', type='bus') }}" class="dropdown-item">{{ bus }}</a></li>
-            <li><a href="{{ url_for('leaderboard', type='air') }}" class="dropdown-item">{{ air }}</a></li>
-            <li><a href="{{ url_for('leaderboard', type='ferry') }}" class="dropdown-item">{{ ferry }}</a></li>
-            <li><a href="{{ url_for('leaderboard', type='aerialway') }}" class="dropdown-item">{{ aerialway }}</a></li>
-            <li><a href="{{ url_for('leaderboard', type='metro') }}" class="dropdown-item">{{ metro }}</a></li>
-            <li><a href="{{ url_for('leaderboard', type='tram') }}" class="dropdown-item">{{ tram }}</a></li>
-            <li><a href="{{ url_for('leaderboard', type='train_countries') }}" class="dropdown-item">{{ leaderboardTrainCountries }}</a></li>
-            <li><a href="{{ url_for('leaderboard', type='world_squares') }}" class="dropdown-item">{{worldSquares}}</a></li>
-            <li><a href="{{ url_for('leaderboard', type='countries') }}" class="dropdown-item">{{crossedCountries}}</a></li>
-        </ul>
-    </div>
+    <a href="{{ url_for('leaderboard', type='train') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'train' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'train' else 'false' }}"
+       title="{{ train }}">
+      {{ train }}
+    </a>
+
+    <a href="{{ url_for('leaderboard', type='bus') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'bus' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'bus' else 'false' }}"
+       title="{{ bus }}">
+      {{ bus }}
+    </a>
+
+    <a href="{{ url_for('leaderboard', type='air') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'air' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'air' else 'false' }}"
+       title="{{ air }}">
+      {{ air }}
+    </a>
+
+    <a href="{{ url_for('leaderboard', type='ferry') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'ferry' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'ferry' else 'false' }}"
+       title="{{ ferry }}">
+      {{ ferry }}
+    </a>
+
+    <a href="{{ url_for('leaderboard', type='aerialway') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'aerialway' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'aerialway' else 'false' }}"
+       title="{{ aerialway }}">
+      {{ aerialway }}
+    </a>
+
+    <a href="{{ url_for('leaderboard', type='metro') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'metro' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'metro' else 'false' }}"
+       title="{{ metro }}">
+      {{ metro }}
+    </a>
+
+    <a href="{{ url_for('leaderboard', type='tram') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'tram' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'tram' else 'false' }}"
+       title="{{ tram }}">
+      {{ tram }}
+    </a>
+
+    <a href="{{ url_for('leaderboard', type='train_countries') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'train_countries' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'train_countries' else 'false' }}"
+       title="{{ leaderboardTrainCountries }}">
+      {{ leaderboardTrainCountries }}
+    </a>
+
+    <a href="{{ url_for('leaderboard', type='world_squares') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'world_squares' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'world_squares' else 'false' }}"
+       title="{{ worldSquares }}">
+      {{ worldSquares }}
+    </a>
+
+    <a href="{{ url_for('leaderboard', type='countries') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'countries' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'countries' else 'false' }}"
+       title="{{ crossedCountries }}">
+      {{ crossedCountries }}
+    </a>
+
+    <a href="{{ url_for('leaderboard', type='carbon') }}"
+       class="btn btn-pill {{ 'btn-switch active' if type == 'carbon' else 'btn-switch' }}"
+       aria-current="{{ 'page' if type == 'carbon' else 'false' }}"
+       title="{{ CO2 }}">
+      {{ CO2 }}
+    </a>
+  </div>
+
+  <!-- Mobile -->
+  <div class="dropdown d-md-none">
+    <button class="btn btn-switch w-100 dropdown-toggle" type="button" id="leaderboardDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+      {{ leaderboardSelectType }}
+    </button>
+    <ul class="dropdown-menu shadow-lg rounded-3 w-100" aria-labelledby="leaderboardDropdown">
+      <li><a class="dropdown-item {{ 'active' if type == 'all' }}" href="{{ url_for('leaderboard', type='all') }}">{{ leaderboardTotal }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'train' }}" href="{{ url_for('leaderboard', type='train') }}">{{ train }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'bus' }}" href="{{ url_for('leaderboard', type='bus') }}">{{ bus }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'air' }}" href="{{ url_for('leaderboard', type='air') }}">{{ air }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'ferry' }}" href="{{ url_for('leaderboard', type='ferry') }}">{{ ferry }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'aerialway' }}" href="{{ url_for('leaderboard', type='aerialway') }}">{{ aerialway }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'metro' }}" href="{{ url_for('leaderboard', type='metro') }}">{{ metro }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'tram' }}" href="{{ url_for('leaderboard', type='tram') }}">{{ tram }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'train_countries' }}" href="{{ url_for('leaderboard', type='train_countries') }}">{{ leaderboardTrainCountries }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'world_squares' }}" href="{{ url_for('leaderboard', type='world_squares') }}">{{ worldSquares }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'countries' }}" href="{{ url_for('leaderboard', type='countries') }}">{{ crossedCountries }}</a></li>
+      <li><a class="dropdown-item {{ 'active' if type == 'carbon' }}" href="{{ url_for('leaderboard', type='carbon') }}">{{ CO2 }}</a></li>
+    </ul>
+  </div>
 </div>
+
+
+<style>
+.leaderboard-switcher {
+  --switch-bg: #f8f9fa;
+  --switch-border: #c9ced6;
+  --switch-text: #1f2937;
+  --switch-active-bg: #207cca;
+  --switch-active-text: #fff;
+}
+
+/* Base button style */
+.btn.btn-switch.btn-pill {
+  border: 1px solid var(--switch-border);
+  background: var(--switch-bg);
+  color: var(--switch-text);
+  border-radius: 9999px;
+  padding: .45rem .9rem;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+  transition: all 0.15s ease;
+}
+
+/* Hover */
+.btn.btn-switch:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+}
+
+/* Active */
+.btn.btn-switch[aria-current="page"] {
+  background: var(--switch-active-bg);
+  border-color: var(--switch-active-bg);
+  color: var(--switch-active-text);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .15);
+}
+
+/* Dropdown button */
+#leaderboardDropdown {
+  border: 1px solid var(--switch-border);
+  background: var(--switch-bg);
+  color: var(--switch-text);
+  border-radius: 9999px;
+  padding: .45rem .9rem;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  border-radius: 12px;
+  padding: .4rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .1);
+}
+
+.dropdown-item {
+  border-radius: 8px;
+  padding: .5rem .75rem;
+}
+
+</style>

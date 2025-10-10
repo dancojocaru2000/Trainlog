@@ -619,5 +619,6 @@
     "powerType": "Leistungsart",
     "useOldRouter": "Zum klassischen Routingsystem wechseln",
     "useNewRouter": "Neuen Router ausprobieren (zeigt Elektrifizierung)",
-    "news": "Trainlog-Nachrichten"
+    "news": "Trainlog-Nachrichten",
+    "CO2": "CO₂"
 }

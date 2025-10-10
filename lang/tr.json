@@ -619,5 +619,6 @@
     "powerType": "Güç türü",
     "useOldRouter": "Klasik yönlendirme motoruna geç",
     "useNewRouter": "Yeni yönlendiriciyi deneyin (elektrifikasyonu gösterir)",
-    "news": "Trainlog Haberler"
+    "news": "Trainlog Haberler",
+    "CO2": "CO₂"
 }
