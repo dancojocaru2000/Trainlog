@@ -111,41 +111,33 @@
     // ============================================
     // METRICS CONFIGURATION
     // ============================================
+    const LANG = "{{langId}}";
+
     const METRICS_CONFIG = {
         trips: {
             label: '{{trips}}',
             suffix: 'Trips',
-            unit: '{{trips}}'.toLowerCase(),
-            formatValue: (value) => value,
+            formatValue: (value) => new Intl.NumberFormat(LANG).format(value) + ' {{trips}}',
             enabled: true
         },
         km: {
             label: '{{km}}',
             suffix: 'Km',
-            unit: 'km',
-            formatValue: (value) => Math.round(value / 1000),
+            // raw value is meters → format as kilometers with unit handled by Intl
+            formatValue: (value) => mToKm(value) + 'km',
             enabled: true
         },
         duration: {
-            label: 'Duration',
+            label: '{{tripDuration}}',
             suffix: 'Duration',
-            unit: 'hours',
-            formatValue: (value) => Math.round(value / 60),
-            enabled: false
+            formatValue: (value) => secondsToDhm(value, LANG),
+            enabled: true
         },
-        co2: {
-            label: 'CO₂ Saved',
-            suffix: 'Co2',
-            unit: 'kg CO₂',
-            formatValue: (value) => Math.round(value),
-            enabled: false
-        },
-        cost: {
-            label: 'Cost',
-            suffix: 'Cost',
-            unit: '€',
-            formatValue: (value) => Math.round(value * 100) / 100,
-            enabled: false
+        carbon: {
+            label: '{{CO2}}',
+            suffix: 'CO2',
+            formatValue: (value) => formatCarbonFootprint(value, LANG),
+            enabled: true
         }
     };
 
@@ -244,25 +236,20 @@
             if (item.station) converted.station = item.station;
             if (item.year !== undefined) converted.year = item.year;
             
-            // Extract metric values
-            // Check if item has the metric-specific fields (e.g., pastTrips/pastKm)
+            // Extract metric values (store raw numbers only)
             if (item['past' + suffix] !== undefined) {
-                // Standard format: pastTrips, pastKm, etc.
-                converted.past = config.formatValue(item['past' + suffix] || 0);
-                converted.plannedFuture = config.formatValue(item['plannedFuture' + suffix] || 0);
-                
+                converted.past = item['past' + suffix] || 0;
+                converted.plannedFuture = item['plannedFuture' + suffix] || 0;
                 if (item['future' + suffix] !== undefined) {
-                    converted.future = config.formatValue(item['future' + suffix] || 0);
+                    converted.future = item['future' + suffix] || 0;
                 }
             } else if (item.pastKm !== undefined && suffix === 'Km') {
-                // Routes/Stations with Km data
-                converted.past = config.formatValue(item.pastKm || 0);
-                converted.plannedFuture = config.formatValue(item.plannedFutureKm || 0);
+                converted.past = item.pastKm || 0;
+                converted.plannedFuture = item.plannedFutureKm || 0;
                 if (item.futureKm !== undefined) {
-                    converted.future = config.formatValue(item.futureKm || 0);
+                    converted.future = item.futureKm || 0;
                 }
             } else {
-                // Fallback to trip counts (past/plannedFuture/future)
                 converted.past = item.past || 0;
                 converted.plannedFuture = item.plannedFuture || 0;
                 if (item.future !== undefined) {
@@ -370,14 +357,6 @@
     // CHART RENDERING
     // ============================================
     function renderCharts(data) {
-        // Dispose existing charts
-        Object.keys(chartsInstances).forEach(key => {
-            if (chartsInstances[key]) {
-                chartsInstances[key].dispose();
-            }
-        });
-        chartsInstances = {};
-
         var hGridConfig = {
             bottom: '28px',
             left: isMobile() ? '60px' : '120px'
@@ -425,22 +404,22 @@
 
         function commonTooltipFormatter(params) {
             const config = METRICS_CONFIG[currentMetric];
-            var result = params[0].name + '<br/>';
-            
+            let result = params[0].name + '<br/>';
+
             params.forEach(function(item) {
                 if (item.value > 0) {
-                    var marker;
+                    let marker;
                     if (item.seriesName === '{{plannedFuture}}') {
-                        var pattern = createPattern(getColor(tripType));
-                        var patternURL = pattern.image.toDataURL();
+                        const pattern = createPattern(getColor(tripType));
+                        const patternURL = pattern.image.toDataURL();
                         marker = `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background:url(${patternURL});"></span>`;
                     } else {
                         marker = item.marker;
                     }
-                    result += `${marker}  ${item.seriesName} : ${formatNumber("{{langId}}", item.value)} ${config.unit}<br/>`;
+                    result += `${marker} ${item.seriesName}: ${config.formatValue(item.value)}<br/>`;
                 }
             });
-            
+
             return result;
         }
         

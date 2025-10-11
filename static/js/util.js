@@ -154,21 +154,33 @@ function getLangTooltip(lang, text=false){
 
 
 function secondsToDhm(seconds, locale) {
-  if (typeof(seconds) == "number"){
-    seconds = Number(seconds);
-    var d = Math.floor(seconds / (3600*24));
-    var h = Math.floor(seconds % (3600*24) / 3600);
-    var m = Math.floor(seconds % 3600 / 60);
-    var dDisplay = d > 0 ? d + (locale=="fr" ? "j " : "d ") : "";
-    var hDisplay = h > 0 ? h + "h " : "";
-    var mDisplay = m > 0 ? m + "min " : "";
-    return dDisplay + hDisplay + mDisplay;
-  }
-  else{
-    return seconds;
-  }
- 
-  }
+    if (typeof seconds !== "number" || isNaN(seconds)) {
+        return seconds;
+    }
+
+    const totalSeconds = Math.floor(seconds);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+
+    // Build structured duration
+    const duration = {};
+    if (days > 0) duration.days = days;
+    if (hours > 0) duration.hours = hours;
+    if (minutes > 0) duration.minutes = minutes;
+
+    // Show seconds if:
+    // - less than 1 minute total, OR
+    // - we already have minutes and some leftover seconds
+    if (totalSeconds < 60 || (minutes > 0 && secs > 0 && !days && !hours)) {
+        duration.seconds = secs;
+    }
+
+    return new Intl.DurationFormat(locale || "en", {
+        style: "narrow"
+    }).format(duration);
+}
 
 function getGetParams(){
   queryString = window.location.search;
@@ -1053,14 +1065,14 @@ function formatCarbonValue(value, unit = '') {
     if (grams < 1) {
       return `< 1 g CO₂eq${unit}`;
     }
-    return `${grams.toFixed(0)} g CO₂eq${unit}`;
+    return `${grams.toFixed(0)}g CO₂eq${unit}`;
   }
   
   if (value < 10) {
-    return `${value.toFixed(1)} kg CO₂eq${unit}`;
+    return `${value.toFixed(1)}kg CO₂eq${unit}`;
   }
   
-  return `${value.toFixed(0)} kg CO₂eq${unit}`;
+  return `${value.toFixed(0)}kg CO₂eq${unit}`;
 }
 
 // Function to format CO2/km for display
