@@ -40,11 +40,79 @@
     .operator-type-select:hover {
         text-decoration: underline;
     }
+
+    .missing-operator-badge {
+        display: inline-block;
+        margin: 5px;
+        padding: 5px 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+
+    .missing-operator-count {
+        color: #6c757d;
+        font-size: 0.875rem;
+        margin-left: 5px;
+    }
+
+    .type-header {
+        cursor: pointer;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        transition: background-color 0.2s;
+    }
+
+    .type-header:hover {
+        background-color: #e9ecef;
+    }
+
+    .type-header .badge {
+        font-size: 0.9rem;
+    }
+
+    .top-operators-card {
+        background-color: #fff3cd;
+        border: 1px solid #ffc107;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .operator-list-item {
+        padding: 8px 12px;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .operator-list-item:last-child {
+        border-bottom: none;
+    }
+
+    .operator-list-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .collapse-icon {
+        transition: transform 0.2s;
+    }
+
+    .collapsed .collapse-icon {
+        transform: rotate(-90deg);
+    }
 </style>
 
 <div class="container">
     <h1 class="mt-3">Operators and Logos</h1>
-    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#operatorModal" onclick="clearForm()">Add Operator</button>
+    <div class="mb-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#operatorModal" onclick="clearForm()">Add Operator</button>
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#missingOperatorsModal" onclick="loadMissingOperators()">View Missing Operators</button>
+    </div>
     <table id="operatorTable" class="mt-3">
         <thead>
             <tr>
@@ -87,6 +155,27 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
+
+<!-- Modal for Missing Operators -->
+<div class="modal fade" id="missingOperatorsModal" tabindex="-1" aria-labelledby="missingOperatorsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="missingOperatorsModalLabel">Missing Operators</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="missingOperatorsContent">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal for showing logo carousel -->
@@ -284,6 +373,145 @@ let currentUid = null;
         });
 
     });
+
+    function loadMissingOperators() {
+        $('#missingOperatorsContent').html(`
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        `);
+
+        $.ajax({
+            type: 'GET',
+            url: '/admin/missing_operators',
+            success: function(response) {
+                if (response.unique_missing_operators === 0) {
+                    $('#missingOperatorsContent').html(`
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">Great!</h4>
+                            <p>No missing operators found. All operators from your trips are already in the database.</p>
+                        </div>
+                    `);
+                    return;
+                }
+
+                // Collect all operators across all types for top 10
+                let allOperators = [];
+                Object.keys(response.missing_operators_by_type).forEach(type => {
+                    response.missing_operators_by_type[type].forEach(op => {
+                        allOperators.push({
+                            operator: op.operator,
+                            occurrences: op.occurrences,
+                            type: type
+                        });
+                    });
+                });
+
+                // Sort by occurrences and get top 10
+                allOperators.sort((a, b) => b.occurrences - a.occurrences);
+                const top10 = allOperators.slice(0, 10);
+
+                let html = `
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0">Summary</h6>
+                            <div>
+                                <span class="badge bg-primary">${response.unique_missing_operators} unique operators</span>
+                                <span class="badge bg-secondary">${response.total_occurrences} total occurrences</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="top-operators-card">
+                        <h6 class="mb-3"><i class="fa-solid fa-star"></i> Top 10 Most Common Missing Operators</h6>
+                        <div class="operator-list">
+                `;
+
+                top10.forEach((op, index) => {
+                    html += `
+                        <div class="operator-list-item">
+                            <div>
+                                <strong>${index + 1}. ${op.operator}</strong>
+                                <span class="badge bg-light text-dark ms-2">${op.type}</span>
+                            </div>
+                            <span class="badge bg-warning text-dark">${op.occurrences} occurrences</span>
+                        </div>
+                    `;
+                });
+
+                html += `
+                        </div>
+                    </div>
+                    <hr>
+                    <h6 class="mb-3">All Missing Operators by Type</h6>
+                    <div class="accordion" id="operatorTypesAccordion">
+                `;
+
+                const sortedTypes = Object.keys(response.missing_operators_by_type).sort((a, b) => {
+                    const aTotal = response.missing_operators_by_type[a].reduce((sum, op) => sum + op.occurrences, 0);
+                    const bTotal = response.missing_operators_by_type[b].reduce((sum, op) => sum + op.occurrences, 0);
+                    return bTotal - aTotal;
+                });
+
+                sortedTypes.forEach((type, index) => {
+                    const operators = response.missing_operators_by_type[type];
+                    const totalOccurrences = operators.reduce((sum, op) => sum + op.occurrences, 0);
+                    const isFirst = index === 0;
+                    
+                    html += `
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading-${type}">
+                                <button class="accordion-button ${isFirst ? '' : 'collapsed'}" type="button" 
+                                        data-bs-toggle="collapse" data-bs-target="#collapse-${type}" 
+                                        aria-expanded="${isFirst ? 'true' : 'false'}" aria-controls="collapse-${type}">
+                                    <strong class="text-capitalize">${type}</strong>
+                                    <span class="ms-auto me-3">
+                                        <span class="badge bg-primary">${operators.length} operators</span>
+                                        <span class="badge bg-secondary">${totalOccurrences} occurrences</span>
+                                    </span>
+                                </button>
+                            </h2>
+                            <div id="collapse-${type}" class="accordion-collapse collapse ${isFirst ? 'show' : ''}" 
+                                 aria-labelledby="heading-${type}" data-bs-parent="#operatorTypesAccordion">
+                                <div class="accordion-body">
+                                    <div class="operator-list">
+                    `;
+
+                    operators.forEach(op => {
+                        html += `
+                            <div class="operator-list-item">
+                                <strong>${op.operator}</strong>
+                                <span class="badge bg-light text-dark">${op.occurrences} occurrences</span>
+                            </div>
+                        `;
+                    });
+
+                    html += `
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                    </div>
+                `;
+
+                $('#missingOperatorsContent').html(html);
+            },
+            error: function(error) {
+                $('#missingOperatorsContent').html(`
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">Error</h4>
+                        <p>Failed to load missing operators: ${error.responseJSON?.message || 'Unknown error'}</p>
+                    </div>
+                `);
+            }
+        });
+    }
 
     function updateOperator(uid, field, value) {
         $.ajax({

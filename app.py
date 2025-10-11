@@ -3538,6 +3538,83 @@ def borked_trips(username=None):
                 }
             )
 
+@app.route("/admin/missing_operators")
+@admin_required
+def missing_operators():
+    with managed_cursor(mainConn) as main_cursor:
+        # Get all distinct operators from trips with their types and counts
+        main_cursor.execute("""
+            SELECT operator, type
+            FROM trip
+            WHERE operator IS NOT NULL AND operator != ''
+            AND type not in ('car', 'walk', 'cycle', 'poi', 'accommodation', 'restaurant')
+        """)
+        trip_rows = main_cursor.fetchall()
+        
+        if not trip_rows:
+            return jsonify({
+                "missing_operators": [],
+                "total_count": 0,
+                "by_type": {}
+            })
+        
+        # Split comma-separated operators and count them by type
+        operator_counts = {}  # {(operator, type): count}
+        for row in trip_rows:
+            operators = [op.strip() for op in str(row["operator"]).split(",")]
+            trip_type = row["type"]
+            for operator in operators:
+                if operator:  # Skip empty strings
+                    key = (operator, trip_type)
+                    operator_counts[key] = operator_counts.get(key, 0) + 1
+        
+        if not operator_counts:
+            return jsonify({
+                "missing_operators": [],
+                "total_count": 0,
+                "by_type": {}
+            })
+        
+        # Get all unique operators
+        all_operators = list(set(op for op, _ in operator_counts.keys()))
+        existing_operators = set()
+        
+        # Check which operators exist in batches
+        batch_size = 999
+        for i in range(0, len(all_operators), batch_size):
+            batch = all_operators[i : i + batch_size]
+            placeholders = ",".join(["?"] * len(batch))
+            main_cursor.execute(
+                f"SELECT DISTINCT short_name FROM operators WHERE short_name IN ({placeholders})",
+                batch
+            )
+            existing_operators.update(row["short_name"] for row in main_cursor.fetchall())
+        
+        # Build results by type
+        by_type = {}
+        total_occurrences = 0
+        
+        for (operator, trip_type), count in operator_counts.items():
+            if operator not in existing_operators:
+                if trip_type not in by_type:
+                    by_type[trip_type] = []
+                by_type[trip_type].append({
+                    "operator": operator,
+                    "occurrences": count
+                })
+                total_occurrences += count
+        
+        # Sort each type's operators by occurrences descending
+        for trip_type in by_type:
+            by_type[trip_type].sort(key=lambda x: x["occurrences"], reverse=True)
+        
+        return jsonify({
+            "missing_operators_by_type": by_type,
+            "total_occurrences": total_occurrences,
+            "unique_missing_operators": sum(len(ops) for ops in by_type.values())
+        })
+    
+
 @app.route("/admin/add_dummy_path/<trip_id>", methods=["GET"])
 @owner_required
 def add_dummy_path(trip_id):
