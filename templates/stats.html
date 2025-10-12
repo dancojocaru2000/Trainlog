@@ -25,7 +25,7 @@
             {% endfor %}       
         {%else%}
             <option value="combined" {% if tripType == 'combined' %}selected{% endif %}>
-                All Types Combined
+                {{all}}
             </option>
             {% for type, data in distinctTypes.items() %}
                 <option value="{{ type }}" {% if tripType == type %}selected{% endif %}>
