@@ -579,6 +579,9 @@
         if (isCombinedMode) {
             // Group by trip type
             const byTripType = {};
+            let totalPast = 0;
+            let totalFuture = 0;
+            
             params.forEach(item => {
                 if (item.value > 0) {
                     // Extract trip type and status from series name
@@ -593,8 +596,10 @@
                         
                         if (status === '{{past}}') {
                             byTripType[tripTypeLabel].past = item.value;
+                            totalPast += item.value;
                         } else {
                             byTripType[tripTypeLabel].future = item.value;
+                            totalFuture += item.value;
                         }
                     }
                 }
@@ -612,6 +617,17 @@
                     result += `&nbsp;&nbsp;{{plannedFuture}}: ${config.formatValue(data.future)}<br/>`;
                 }
             });
+            
+            // Add totals
+            if (totalPast > 0 || totalFuture > 0) {
+                result += '<br/><strong>Total</strong><br/>';
+                if (totalPast > 0) {
+                    result += `&nbsp;&nbsp;{{past}}: ${config.formatValue(totalPast)}<br/>`;
+                }
+                if (totalFuture > 0) {
+                    result += `&nbsp;&nbsp;{{plannedFuture}}: ${config.formatValue(totalFuture)}<br/>`;
+                }
+            }
         } else {
             params.forEach(function(item) {
                 if (item.value > 0) {
