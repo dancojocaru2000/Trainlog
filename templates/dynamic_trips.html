@@ -113,7 +113,7 @@
 
 <div class="multiLink">
     <button class="btn btn-secondary btn-lg multiCancel" onclick="deselectAll();">✕</button>
-    <button class="btn btn-primary btn-lg multiTrip" onclick="getMultiLink();">{{ shareTrip }}</button>
+    <button type="button" class="btn btn-primary btn-lg multiTrip">{{ shareTrip }}</button>
     <div class="btn-group dropup">
         <button type="button" class="btn btn-lg dropdown-toggle btn-secondary multiDropdown" data-bs-toggle="dropdown" aria-expanded="false"></button>
         <ul class="dropdown-menu" style="min-width: 12rem;">
@@ -818,9 +818,11 @@ $('.deleteButton').off('click').on('click', function() {
     
 }
 
-function getMultiLink(){
-  location.href = "{{ url_for('public_trip', tripIds='')}}"+checkedTrips;
-}
+const btn = document.querySelector('.multiTrip'),
+      url = "{{ url_for('public_trip', tripIds='') }}";
+btn.onmousedown = e => e.button===1 && e.preventDefault();
+btn.onclick = () => window.open(url+checkedTrips, '_self','noopener');
+btn.onauxclick = e => e.button===1 && (e.preventDefault(), window.open(url+checkedTrips,'_blank','noopener'));
 
 function processDelete(id){
     $.post({
