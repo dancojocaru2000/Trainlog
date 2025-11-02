@@ -819,10 +819,10 @@ $('.deleteButton').off('click').on('click', function() {
 }
 
 const btn = document.querySelector('.multiTrip'),
-      url = "{{ url_for('public_trip', tripIds='') }}";
+      trips_url = "{{ url_for('public_trip', tripIds='') }}";
 btn.onmousedown = e => e.button===1 && e.preventDefault();
-btn.onclick = () => window.open(url+checkedTrips, '_self','noopener');
-btn.onauxclick = e => e.button===1 && (e.preventDefault(), window.open(url+checkedTrips,'_blank','noopener'));
+btn.onclick = () => window.open(trips_url+checkedTrips, '_self','noopener');
+btn.onauxclick = e => e.button===1 && (e.preventDefault(), window.open(trips_url+checkedTrips,'_blank','noopener'));
 
 function processDelete(id){
     $.post({
