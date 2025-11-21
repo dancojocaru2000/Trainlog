@@ -1003,8 +1003,8 @@
                 : `/admin/getStats/${tripType}`;
         } else {
             urlPath = statYear 
-                ? `/${username}/getStats/${statYear}/${tripType}`
-                : `/${username}/getStats/${tripType}`;
+                ? `/u/${username}/getStats/${statYear}/${tripType}`
+                : `/u/${username}/getStats/${tripType}`;
         }
             
         try {
@@ -1032,8 +1032,8 @@
                     : `/admin/getStats/${type}`;
             } else {
                 urlPath = statYear 
-                    ? `/${username}/getStats/${statYear}/${type}`
-                    : `/${username}/getStats/${type}`;
+                    ? `/u/${username}/getStats/${statYear}/${type}`
+                    : `/u/${username}/getStats/${type}`;
             }
             
             try {
