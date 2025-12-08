@@ -3824,7 +3824,7 @@ def get_admin_stats_api(tripType, year=None):
 @app.route("/public/<username>/stats")
 @public_required
 def public_stats(username, tripType=None, year=None):
-    if tripType in ("walk", "cycle", "car"):
+    if tripType in ('poi', 'accommodation', 'restaurant', 'walk', 'cycle', 'car'):
         abort(401)
     with managed_cursor(mainConn) as cursor:
         cursor.execute(
