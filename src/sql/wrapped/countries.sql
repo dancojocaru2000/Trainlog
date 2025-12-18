@@ -18,6 +18,7 @@ country_data AS (
         END AS country_km
     FROM base_filter,
     LATERAL jsonb_each(countries::jsonb)
+    WHERE key != 'UN'
 ),
 country_totals AS (
     SELECT 
