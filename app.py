@@ -9138,7 +9138,7 @@ def list_routes():
     return '<br>'.join(sorted(routes))
 
 @app.get("/flags/<code>.svg")
-def flag(code):
+def get_flag(code):
     w = request.args.get("w")
     h = request.args.get("h")
     svg = open(f"static/images/flags/{code}.svg").read()
