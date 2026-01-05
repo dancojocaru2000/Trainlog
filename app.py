@@ -2300,24 +2300,35 @@ def new_flight(username):
     )
 
 
-@app.route("/u/<username>/routing")
+@app.route("/u/<username>/routing", methods=['GET', 'POST'])
 @login_required
 def routing(username):
+    trip_data = None
+    if request.method == 'POST':
+        trip_data = request.form.get('trip_data') or request.get_json()
+        if isinstance(trip_data, dict):
+            trip_data = json.dumps(trip_data)
     return render_template(
         "routing.html",
         username=username,
+        trip_data=trip_data,
         **lang[session["userinfo"]["lang"]],
         **session["userinfo"],
     )
 
-
-@app.route("/u/<username>/air_routing/<type>")
+@app.route("/u/<username>/air_routing/<type>", methods=['GET', 'POST'])
 @login_required
 def air_routing(username, type):
+    trip_data = None
+    if request.method == 'POST':
+        trip_data = request.form.get('trip_data') or request.get_json()
+        if isinstance(trip_data, dict):
+            trip_data = json.dumps(trip_data)
     return render_template(
         "air_routing.html",
         type=type,
         username=username,
+        trip_data=trip_data,
         **lang[session["userinfo"]["lang"]],
         **session["userinfo"],
     )
