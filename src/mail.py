@@ -38,8 +38,8 @@ def get_user_from_sender(sender_raw):
         logger.info(f"User {user.username} is not premium, ignoring email")
         return None
     env = os.environ["ENVIRONMENT"]
-    if env != Env.PROD:
-        logger.info(f"Only process emails in Prod, env = {env}, Env.PROD = {Env.PROD}")
+    if env != Env.PROD.value:
+        logger.info(f"Only process emails in Prod, env = {env}, Env.PROD = {Env.PROD.value}")
         return None
     
     return user
