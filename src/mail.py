@@ -35,6 +35,10 @@ def get_user_from_sender(sender_raw):
     if not user.premium:
         logger.info(f"User {user.username} is not premium, ignoring email")
         return None
+    env = os.environ["ENVIRONMENT"]
+    if env != Env.PROD:
+        logger.info(f"Only process emails in Prod")
+        return None
     
     return user
 
@@ -291,7 +295,7 @@ def create_trip_from_parsed(user, parsed_trip):
     )
     
     create_trip(trip)
-    logger.info(f"Created trip for {user.username}: {origin_station} -> {dest_station}")
+    logger.info(f"Created trip for {user.username}")
     return trip
 
 
@@ -309,7 +313,7 @@ def process_incoming_email(raw):
             subject = subject.decode(enc or "utf-8")
         body = get_email_body(msg)
         
-        logger.info(f"Processing email from {user.username}: {subject}")
+        logger.info(f"Processing email from {user.username}")
         
         trips = parse_ticket_with_ai(subject, body, user.lang)
         
