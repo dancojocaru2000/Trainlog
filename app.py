@@ -228,8 +228,10 @@ from src.paths import Path
 from src.carbon import *
 from src.graphhopper import convert_graphhopper_to_osrm
 from src.users import User, Friendship, authDb
+from src.mail import start_email_listener
 
 app = Flask(__name__)
+start_email_listener(app)
 app.config['DEBUG'] = True
 Compress(app)
 app.autoversion = True

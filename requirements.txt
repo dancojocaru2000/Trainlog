@@ -47,3 +47,4 @@ geopy==2.4.1
 gpxpy==1.6.2
 psycopg2-binary==2.9.10
 stripe==12.4.0
+IMAPClient==3.0.1
