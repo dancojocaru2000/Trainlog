@@ -9,6 +9,9 @@ import json
 import os
 import requests
 from datetime import datetime
+from pypdf import PdfReader
+from icalendar import Calendar
+from io import BytesIO
 
 from py.utils import load_config, getCountryFromCoordinates, get_flag_emoji, getDistance
 from src.trips import Trip, create_trip
@@ -34,6 +37,65 @@ def get_email_body(msg):
         if payload:
             return payload.decode(errors="ignore")
     return ""
+
+def extract_attachments(msg):
+    """Extract ICS and PDF attachments from email."""
+    attachments = {"ics": [], "pdf": []}
+    
+    if not msg.is_multipart():
+        return attachments
+    
+    for part in msg.walk():
+        content_type = part.get_content_type()
+        filename = part.get_filename()
+        
+        if content_type == "text/calendar" or (filename and filename.lower().endswith(".ics")):
+            payload = part.get_payload(decode=True)
+            if payload:
+                attachments["ics"].append({"filename": filename, "data": payload})
+        
+        elif content_type == "application/pdf" or (filename and filename.lower().endswith(".pdf")):
+            payload = part.get_payload(decode=True)
+            if payload:
+                attachments["pdf"].append({"filename": filename, "data": payload})
+    
+    return attachments
+
+def parse_ics_content(ics_data):
+    """Parse ICS data and extract trip-relevant info."""
+    events = []
+    try:
+        cal = Calendar.from_ical(ics_data)
+        for component in cal.walk():
+            if component.name == "VEVENT":
+                event = {
+                    "summary": str(component.get("summary", "")),
+                    "description": str(component.get("description", "")),
+                    "location": str(component.get("location", "")),
+                    "dtstart": component.get("dtstart"),
+                    "dtend": component.get("dtend"),
+                }
+                if event["dtstart"]:
+                    event["dtstart"] = event["dtstart"].dt
+                if event["dtend"]:
+                    event["dtend"] = event["dtend"].dt
+                events.append(event)
+    except Exception as e:
+        logger.error(f"ICS parsing error: {e}")
+    return events
+
+def extract_pdf_text(pdf_data):
+    """Extract text from PDF bytes using pypdf."""
+    text = ""
+    try:
+        reader = PdfReader(BytesIO(pdf_data))
+        for page in reader.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + "\n"
+    except Exception as e:
+        logger.error(f"PDF extraction error: {e}")
+    return text
 
 def get_user_from_sender(sender_raw):
     _, email_address = parseaddr(sender_raw)
@@ -61,7 +123,7 @@ def get_airport_by_iata(iata):
             return dict(result)
     return None
 
-def geocode_station(query, trip_type="train"):
+def geocode_station(query, trip_type="train", fallback_coords=None):
     from py.utils import getCountryFromCoordinates
     
     osm_tags = {
@@ -84,27 +146,38 @@ def geocode_station(query, trip_type="train"):
     for tag in osm_tags.get(trip_type, []):
         params.append(("osm_tag", tag))
     
+    data = None
     try:
-        response = requests.get(chiel, params=params, timeout=timeout)
-        data = response.json()
+        resp = requests.get(chiel, params=params, timeout=timeout)
+        data = resp.json()
     except Exception:
         try:
-            response = requests.get(komoot, params=params, timeout=timeout)
-            data = response.json()
+            resp = requests.get(komoot, params=params, timeout=timeout)
+            data = resp.json()
         except Exception as e:
             logger.error(f"Geocoding error: {e}")
-            return None
     
-    if not data.get("features"):
+    # Use AI fallback coordinates if geocoding failed
+    if (not data or not data.get("features")) and fallback_coords:
+        lat, lng = fallback_coords
+        country = getCountryFromCoordinates(lat, lng)
+        return {
+            "name": query,
+            "lat": lat,
+            "lng": lng,
+            "country_code": country.get("countryCode", "")
+        }
+    
+    if not data or not data.get("features"):
         return None
     
     feat = data["features"][0]
     props = feat["properties"]
-    lon, lat = feat["geometry"]["coordinates"]
+    lng, lat = feat["geometry"]["coordinates"]
     
     country_code = props.get("countrycode", "")
     if not country_code or country_code in ["CN", "FI"]:
-        country = getCountryFromCoordinates(lat, lon)
+        country = getCountryFromCoordinates(lat, lng)
         country_code = country.get("countryCode", "")
     
     name = props.get("name", query)
@@ -115,11 +188,11 @@ def geocode_station(query, trip_type="train"):
     return {
         "name": name,
         "lat": lat,
-        "lng": lon,
+        "lng": lng,
         "country_code": country_code
     }
 
-def parse_ticket_with_ai(subject, body, user_lang="en"):
+def parse_ticket_with_ai(subject, body, user_lang="en", ics_events=None, pdf_texts=None):
     config = load_config()
     api_key = config.get("mistral", {}).get("api_key")
     if not api_key:
@@ -133,6 +206,22 @@ def parse_ticket_with_ai(subject, body, user_lang="en"):
     }
     lang_name = lang_names.get(user_lang, "English")
     
+    attachment_info = ""
+    if ics_events:
+        attachment_info += "\n\nICS CALENDAR DATA:\n"
+        for i, evt in enumerate(ics_events, 1):
+            attachment_info += f"Event {i}: {evt['summary']}\n"
+            attachment_info += f"  Location: {evt['location']}\n"
+            attachment_info += f"  Start: {evt['dtstart']}\n"
+            attachment_info += f"  End: {evt['dtend']}\n"
+            if evt['description']:
+                attachment_info += f"  Description: {evt['description'][:500]}\n"
+    
+    if pdf_texts:
+        attachment_info += "\n\nPDF ATTACHMENT CONTENT:\n"
+        for i, text in enumerate(pdf_texts, 1):
+            attachment_info += f"--- PDF {i} ---\n{text[:3000]}\n"
+    
     prompt = f"""Extract all trips from this ticket confirmation email.
 A trip is ONE segment (e.g., a flight with one connection = 2 trips).
 
@@ -141,8 +230,12 @@ Return ONLY valid JSON array, no markdown:
   "type": "train|air|bus|ferry|tram|metro",
   "origin": "City or Station name",
   "origin_iata": "ABC or null if not a flight",
+  "origin_lat": latitude as number or null,
+  "origin_lng": longitude as number or null,
   "destination": "City or Station name", 
   "destination_iata": "XYZ or null if not a flight",
+  "destination_lat": latitude as number or null,
+  "destination_lng": longitude as number or null,
   "date": "YYYY-MM-DD",
   "time_departure": "HH:MM or null",
   "time_arrival": "HH:MM or null",
@@ -158,12 +251,13 @@ Return ONLY valid JSON array, no markdown:
   "notes": "Any other relevant info in {lang_name}, or null"
 }}]
 
+For coordinates: provide approximate lat/lng if you know the location (e.g. major stations/cities).
 For aircraft types, use ICAO codes: Boeing 737-800=B738, Airbus A320=A320, Embraer 195=E195, etc.
 
 If not a valid ticket, return []
 
 Subject: {subject}
-Body: {body}"""
+Body: {body}{attachment_info}"""
 
     try:
         response = requests.post(
@@ -241,8 +335,15 @@ def create_trip_from_parsed(user, parsed_trip):
         
         material_type = parsed_trip.get("aircraft_icao")
     else:
-        origin_geo = geocode_station(parsed_trip["origin"], trip_type)
-        dest_geo = geocode_station(parsed_trip["destination"], trip_type)
+        origin_fallback = None
+        dest_fallback = None
+        if parsed_trip.get("origin_lat") and parsed_trip.get("origin_lng"):
+            origin_fallback = (parsed_trip["origin_lat"], parsed_trip["origin_lng"])
+        if parsed_trip.get("destination_lat") and parsed_trip.get("destination_lng"):
+            dest_fallback = (parsed_trip["destination_lat"], parsed_trip["destination_lng"])
+        
+        origin_geo = geocode_station(parsed_trip["origin"], trip_type, origin_fallback)
+        dest_geo = geocode_station(parsed_trip["destination"], trip_type, dest_fallback)
         
         if not origin_geo or not dest_geo:
             logger.error(f"Could not geocode: {parsed_trip['origin']}, {parsed_trip['destination']}")
@@ -418,10 +519,23 @@ def process_incoming_email(raw):
         
         body = get_email_body(msg)
         
-        logger.info(f"Processing email from {user.username}")
+        attachments = extract_attachments(msg)
+        ics_events = []
+        pdf_texts = []
+        
+        for att in attachments["ics"]:
+            events = parse_ics_content(att["data"])
+            ics_events.extend(events)
+        
+        for att in attachments["pdf"]:
+            text = extract_pdf_text(att["data"])
+            if text.strip():
+                pdf_texts.append(text)
+        
+        logger.info(f"Processing email from {user.username} (ICS: {len(ics_events)}, PDFs: {len(pdf_texts)})")
         
         try:
-            trips = parse_ticket_with_ai(subject, body, user.lang)
+            trips = parse_ticket_with_ai(subject, body, user.lang, ics_events, pdf_texts)
         except Exception as e:
             logger.error(f"AI parsing failed: {e}")
             send_error_email(user, subject, "Failed to analyze the email content.")
