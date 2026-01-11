@@ -706,5 +706,18 @@
     "wrapped_stations": "Asemat",
     "wrapped_share_image": "Jaa",
     "wrapped_trips": "matkalla",
-    "wrapped_kilometers": "kilometrit"
+    "wrapped_kilometers": "kilometrit",
+    "email_received": "Me vastaanotimme sähköpostisi.",
+    "email_success_subject": "Matkasi on lisätty Trainlogiin.",
+    "email_success_title": "Sähköposti käsitelty onnistuneesti!",
+    "email_trips_added": "Matka(t) on lisätty tilillesi.",
+    "email_view_trips": "Näytä matkasi",
+    "email_error_subject": "Emme voineet käsitellä sähköpostiasi - Trainlog",
+    "email_error_title": "Emme voineet käsitellä sähköpostiasi.",
+    "email_error_description": "Valitettavasti käsittelyn aikana tapahtui virhe:",
+    "email_error_advice": "Tarkista, että sähköpostisi sisältää voimassa olevan lipun vahvistuksen, ja yritä uudelleen tai lisää matkasi manuaalisesti.",
+    "email_no_trips_subject": "Sähköpostistasi ei löytynyt matkoja - Trainlog",
+    "email_no_trips_title": "Ei matkoja löytynyt",
+    "email_no_trips_description": "Emme löytäneet tästä sähköpostista yhtään kelvollista matkaa. Varmista, että välität liikennöitsijältä saamasi lipunvahvistussähköpostin.",
+    "email_no_trips_formats": "Tuetut muodot sisältävät juna-, lento-, bussi-, lautta-, raitiovaunu- ja metroliput."
 }

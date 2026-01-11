@@ -706,5 +706,18 @@
     "wrapped_stations": "Stacje",
     "wrapped_share_image": "Udostępnij",
     "wrapped_trips": "podróże",
-    "wrapped_kilometers": "kilometry"
+    "wrapped_kilometers": "kilometry",
+    "email_received": "Otrzymaliśmy Twojego e-maila.",
+    "email_success_subject": "Twoje podróże zostały dodane do Trainlog.",
+    "email_success_title": "E-mail został pomyślnie przetworzony!",
+    "email_trips_added": "Podróż(e) zostały dodane do Twojego konta.",
+    "email_view_trips": "Zobacz swoje podróże",
+    "email_error_subject": "Nie można przetworzyć Twojego e-maila - Trainlog",
+    "email_error_title": "Nie mogliśmy przetworzyć Twojego e-maila.",
+    "email_error_description": "Niestety, podczas przetwarzania wystąpił błąd:",
+    "email_error_advice": "Proszę sprawdzić, czy Twój e-mail zawiera ważne potwierdzenie biletu i spróbuj ponownie, lub dodaj swoją podróż ręcznie.",
+    "email_no_trips_subject": "Nie znaleziono podróży w Twoim e-mailu - Trainlog",
+    "email_no_trips_title": "Nie znaleziono podróży",
+    "email_no_trips_description": "Nie znaleźliśmy żadnych ważnych podróży w tym e-mailu. Proszę upewnić się, że przekazujesz e-mail potwierdzający bilet od dostawcy transportu.",
+    "email_no_trips_formats": "Obsługiwane formaty obejmują bilety na pociąg, lot, autobus, prom, tramwaj i metro."
 }

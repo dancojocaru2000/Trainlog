@@ -706,5 +706,18 @@
     "wrapped_stations": "Jaamad",
     "wrapped_share_image": "Jaga",
     "wrapped_trips": "reisid",
-    "wrapped_kilometers": "kilomeetrid"
+    "wrapped_kilometers": "kilomeetrid",
+    "email_received": "Saime teie meili kätte.",
+    "email_success_subject": "Teie reisid on Trainlogisse lisatud.",
+    "email_success_title": "Meiliprotsess õnnestus!",
+    "email_trips_added": "Reis(id) on lisatud teie kontole.",
+    "email_view_trips": "Vaadake oma reise",
+    "email_error_subject": "Ei suutnud teie meili töödelda - Trainlog",
+    "email_error_title": "Me ei suutnud teie meili töödelda.",
+    "email_error_description": "Kahjuks ilmnes töötlemise ajal viga:",
+    "email_error_advice": "Palun kontrollige, et teie meil sisaldaks kehtivat piletikinnitust, ja proovige uuesti või lisage oma reis käsitsi.",
+    "email_no_trips_subject": "Teie meilist ei leitud ühtegi reisi - Trainlog",
+    "email_no_trips_title": "Reise ei leitud",
+    "email_no_trips_description": "Me ei leidnud sellest meilist ühtegi kehtivat reisi. Palun veenduge, et edastate piletikinnituse e-kirja transpordipakkujalt.",
+    "email_no_trips_formats": "Toetatud formaadid hõlmavad rongi-, lennu-, bussi-, parvlaeva-, trammi- ja metroopileteid."
 }

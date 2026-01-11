@@ -706,5 +706,18 @@
     "wrapped_stations": "gares",
     "wrapped_share_image": "Partager",
     "wrapped_trips": "voyages",
-    "wrapped_kilometers": "kilomètres"
+    "wrapped_kilometers": "kilomètres",
+    "email_received": "Nous avons reçu votre email",
+    "email_success_subject": "Vos trajets ont été ajoutés à Trainlog",
+    "email_success_title": "Email traité avec succès !",
+    "email_trips_added": "trajet(s) ont été ajoutés à votre compte",
+    "email_view_trips": "Voir vos trajets",
+    "email_error_subject": "Impossible de traiter votre email - Trainlog",
+    "email_error_title": "Nous n'avons pas pu traiter votre email",
+    "email_error_description": "Malheureusement, une erreur s'est produite lors du traitement :",
+    "email_error_advice": "Veuillez vérifier que votre email contient une confirmation de billet valide et réessayer, ou ajoutez votre trajet manuellement.",
+    "email_no_trips_subject": "Aucun trajet trouvé dans votre email - Trainlog",
+    "email_no_trips_title": "Aucun trajet trouvé",
+    "email_no_trips_description": "Nous n'avons trouvé aucun trajet valide dans cet email. Veuillez vous assurer de transférer un email de confirmation de billet d'un transporteur.",
+    "email_no_trips_formats": "Les formats supportés incluent les billets de train, avion, bus, ferry, tram et métro."
 }

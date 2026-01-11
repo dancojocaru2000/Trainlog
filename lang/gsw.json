@@ -706,5 +706,18 @@
     "wrapped_stations": "Statione",
     "wrapped_share_image": "Teile",
     "wrapped_trips": "Resie",
-    "wrapped_kilometers": "Kilometer"
+    "wrapped_kilometers": "Kilometer",
+    "email_received": "Mir hei din E-Mail empfangä.",
+    "email_success_subject": "Dini Riese sind zuem Trainlog hinzugefügt worde.",
+    "email_success_title": "E-Mail erfolgrich verarbeitet!",
+    "email_trips_added": "Ries/ä sid zu dim Konto hinzugefügt worde.",
+    "email_view_trips": "Lueg dini Riese a",
+    "email_error_subject": "Cha din E-Mail nid verarbeite - Trainlog",
+    "email_error_title": "Mir chönd din E-Mail nid verarbeite.",
+    "email_error_description": "Leider isch es zue äm Fähler cho bim Verarbeite:",
+    "email_error_advice": "Bitte lueg, dass din E-Mail e gültigi Billetconfirmig beinhautet und versuech's nomal, oder fiig dini Ryys manuell dezue.",
+    "email_no_trips_subject": "Kei Riese in dim E-Mail gfunde - Trainlog",
+    "email_no_trips_title": "Kei Riese gfunde",
+    "email_no_trips_description": "Mir hei kei gültigi Riese in däm E-Mail gfunde. Bitte sicher di, dass du e Billetconfirmig vo äm Transportunternehmig wyterleitisch.",
+    "email_no_trips_formats": "Unterstützti Format beinhaltet Zug-, Flug-, Bus-, Fähr-, Tram- und Metro-Billette."
 }

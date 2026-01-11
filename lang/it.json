@@ -706,5 +706,18 @@
     "wrapped_stations": "Stazioni",
     "wrapped_share_image": "Condividi",
     "wrapped_trips": "viaggi",
-    "wrapped_kilometers": "chilometri"
+    "wrapped_kilometers": "chilometri",
+    "email_received": "Abbiamo ricevuto la tua email.",
+    "email_success_subject": "I tuoi viaggi sono stati aggiunti a Trainlog.",
+    "email_success_title": "Email elaborata con successo!",
+    "email_trips_added": "Il viaggio/i viaggi sono stati aggiunti al tuo account.",
+    "email_view_trips": "Visualizza i tuoi viaggi",
+    "email_error_subject": "Impossibile elaborare la tua email - Trainlog",
+    "email_error_title": "Non siamo riusciti a elaborare la tua email.",
+    "email_error_description": "Purtroppo, abbiamo riscontrato un errore durante l'elaborazione:",
+    "email_error_advice": "Per favore, verifica che la tua email contenga una conferma di biglietto valida e riprova, oppure aggiungi il tuo viaggio manualmente.",
+    "email_no_trips_subject": "Nessun viaggio trovato nella tua email - Trainlog",
+    "email_no_trips_title": "Nessun viaggio trovato",
+    "email_no_trips_description": "Non abbiamo trovato viaggi validi in questa email. Assicurati di inoltrare un'email di conferma del biglietto da un fornitore di trasporti.",
+    "email_no_trips_formats": "I formati supportati includono biglietti per treno, volo, autobus, traghetto, tram e metropolitana."
 }

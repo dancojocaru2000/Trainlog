@@ -706,5 +706,18 @@
     "wrapped_stations": "Stationer",
     "wrapped_share_image": "Dela",
     "wrapped_trips": "resor",
-    "wrapped_kilometers": "kilometer"
+    "wrapped_kilometers": "kilometer",
+    "email_received": "Vi mottog ditt e-postmeddelande.",
+    "email_success_subject": "Dina resor har lagts till i Trainlog.",
+    "email_success_title": "E-postmeddelandet har behandlats framgångsrikt!",
+    "email_trips_added": "Resa/resor har lagts till ditt konto.",
+    "email_view_trips": "Visa dina resor",
+    "email_error_subject": "Kunde inte behandla ditt e-postmeddelande - Trainlog",
+    "email_error_title": "Vi kunde inte behandla ditt e-postmeddelande.",
+    "email_error_description": "Tyvärr stötte vi på ett fel när vi behandlade det:",
+    "email_error_advice": "Kontrollera att ditt e-postmeddelande innehåller en giltig biljettsbekräftelse och försök igen, eller lägg in din resa manuellt.",
+    "email_no_trips_subject": "Inga resor hittades i ditt e-postmeddelande - Trainlog",
+    "email_no_trips_title": "Inga resor hittades",
+    "email_no_trips_description": "Vi kunde inte hitta några giltiga resor i detta e-postmeddelande. Se till att du vidarebefordrar ett biljettsbekräftelsemeddelande från en transportleverantör.",
+    "email_no_trips_formats": "Stödda format inkluderar tåg-, flyg-, buss-, färje-, spårvagns- och tunnelbanebiljetter."
 }

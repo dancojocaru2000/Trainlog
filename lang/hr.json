@@ -706,5 +706,18 @@
     "wrapped_stations": "stanice",
     "wrapped_share_image": "Podijeli",
     "wrapped_trips": "putovanja",
-    "wrapped_kilometers": "kilometri"
+    "wrapped_kilometers": "kilometri",
+    "email_received": "Primili smo vašu e-poštu.",
+    "email_success_subject": "Vaša putovanja su dodana u Trainlog.",
+    "email_success_title": "E-pošta je uspješno obrađena!",
+    "email_trips_added": "Putovanje/a su dodana na vaš račun.",
+    "email_view_trips": "Pregledajte svoja putovanja",
+    "email_error_subject": "Nismo mogli obraditi vašu e-poštu - Trainlog",
+    "email_error_title": "Nismo mogli obraditi vašu e-poštu.",
+    "email_error_description": "Nažalost, naišli smo na grešku tijekom obrade:",
+    "email_error_advice": "Molimo provjerite sadrži li vaša e-pošta valjanu potvrdu karte i pokušajte ponovno ili dodajte svoje putovanje ručno.",
+    "email_no_trips_subject": "Nema pronađenih putovanja u vašoj e-pošti - Trainlog",
+    "email_no_trips_title": "Nema pronađenih putovanja",
+    "email_no_trips_description": "Nismo mogli pronaći nijedno važeće putovanje u ovoj e-pošti. Molimo vas da provjerite šaljete li e-poštu s potvrdom karte od prijevoznika.",
+    "email_no_trips_formats": "Podržani formati uključuju karte za vlak, let, autobus, trajekt, tramvaj i metro."
 }

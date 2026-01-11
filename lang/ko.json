@@ -706,5 +706,18 @@
     "wrapped_stations": "역들",
     "wrapped_share_image": "공유하기",
     "wrapped_trips": "여행",
-    "wrapped_kilometers": "킬로미터"
+    "wrapped_kilometers": "킬로미터",
+    "email_received": "귀하의 이메일을 받았습니다.",
+    "email_success_subject": "귀하의 여행이 Trainlog에 추가되었습니다.",
+    "email_success_title": "이메일이 성공적으로 처리되었습니다!",
+    "email_trips_added": "여행이 귀하의 계정에 추가되었습니다.",
+    "email_view_trips": "여행을 확인하세요",
+    "email_error_subject": "이메일을 처리할 수 없습니다 - Trainlog",
+    "email_error_title": "귀하의 이메일을 처리할 수 없습니다.",
+    "email_error_description": "죄송합니다만, 처리 중 오류가 발생했습니다:",
+    "email_error_advice": "이메일에 유효한 티켓 확인이 포함되어 있는지 확인하고 다시 시도하거나 여행을 수동으로 추가하십시오.",
+    "email_no_trips_subject": "이메일에서 여행을 찾을 수 없습니다 - Trainlog",
+    "email_no_trips_title": "여행을 찾을 수 없습니다.",
+    "email_no_trips_description": "이 이메일에서 유효한 여행을 찾을 수 없습니다. 운송 제공업체에서 발송한 티켓 확인 이메일을 전달하고 있는지 확인하십시오.",
+    "email_no_trips_formats": "지원되는 형식에는 기차, 항공, 버스, 페리, 트램 및 지하철 티켓이 포함됩니다."
 }

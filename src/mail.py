@@ -13,7 +13,7 @@ from datetime import datetime
 from py.utils import load_config, getCountryFromCoordinates, get_flag_emoji, getDistance
 from src.trips import Trip, create_trip
 from src.users import User
-from src.consts import Env
+from src.utils import sendEmail, lang
 
 logger = logging.getLogger(__name__)
 _app = None
@@ -46,10 +46,6 @@ def get_user_from_sender(sender_raw):
     
     if not user.premium:
         logger.info(f"User {user.username} is not premium, ignoring email")
-        return None
-    env = os.environ["ENVIRONMENT"]
-    if env != Env.PROD.value:
-        logger.info(f"Only process emails in Prod, env = {env}, Env.PROD = {Env.PROD.value}")
         return None
     
     return user
@@ -245,8 +241,8 @@ def create_trip_from_parsed(user, parsed_trip):
         
         material_type = parsed_trip.get("aircraft_icao")
     else:
-        origin_geo = geocode_station(parsed_trip["origin"])
-        dest_geo = geocode_station(parsed_trip["destination"])
+        origin_geo = geocode_station(parsed_trip["origin"], trip_type)
+        dest_geo = geocode_station(parsed_trip["destination"], trip_type)
         
         if not origin_geo or not dest_geo:
             logger.error(f"Could not geocode: {parsed_trip['origin']}, {parsed_trip['destination']}")
@@ -342,6 +338,64 @@ def create_trip_from_parsed(user, parsed_trip):
     logger.info(f"Created trip for {user.username}")
     return trip
 
+def send_confirmation_email(user, created_trips, subject):
+    config = load_config()
+    base_url = "https://trainlog.me"
+    
+    trip_ids = ",".join(str(t.trip_id) for t in created_trips)
+    trip_url = f"{base_url}/public/trip/{trip_ids}"
+    
+    trip_lines = []
+    for t in created_trips:
+        date_str = t.start_datetime.strftime("%Y-%m-%d") if t.start_datetime else "?"
+        trip_lines.append(f"• {t.origin_station} → {t.destination_station} ({date_str})")
+    trips_summary = "<br>".join(trip_lines)
+    
+    l = lang.get(user.lang, lang["en"])
+    
+    body = f"""
+        <h2>{l["email_success_title"]}</h2>
+        <p>{l["email_received"]}: <strong>{subject}</strong></p>
+        <p><strong>{len(created_trips)} {l["email_trips_added"]}</strong></p>
+        <p>{trips_summary}</p>
+        <p><a href="{trip_url}">{l["email_view_trips"]}</a></p>
+    """
+    
+    sendEmail(user.email, l["email_success_subject"], body)
+    logger.info(f"Sent confirmation email to {user.email}")
+
+def send_error_email(user, subject, error_message):
+    l = lang.get(user.lang, lang["en"])
+    
+    body = f"""
+        <h2>{l["email_error_title"]}</h2>
+        <p>{l["email_received"]}: <strong>{subject}</strong></p>
+        <p>{l["email_error_description"]}</p>
+        <p><em>{error_message}</em></p>
+        <p>{l["email_error_advice"]}</p>
+    """
+    
+    try:
+        sendEmail(user.email, l["email_error_subject"], body)
+        logger.info(f"Sent error email to {user.email}")
+    except Exception as e:
+        logger.error(f"Failed to send error email to {user.email}: {e}")
+
+def send_no_trips_email(user, subject):
+    l = lang.get(user.lang, lang["en"])
+    
+    body = f"""
+        <h2>{l["email_no_trips_title"]}</h2>
+        <p>{l["email_received"]}: <strong>{subject}</strong></p>
+        <p>{l["email_no_trips_description"]}</p>
+        <p>{l["email_no_trips_formats"]}</p>
+    """
+    
+    try:
+        sendEmail(user.email, l["email_no_trips_subject"], body)
+        logger.info(f"Sent no-trips email to {user.email}")
+    except Exception as e:
+        logger.error(f"Failed to send no-trips email to {user.email}: {e}")
 
 def process_incoming_email(raw):
     msg = email_lib.message_from_bytes(raw)
@@ -352,21 +406,59 @@ def process_incoming_email(raw):
         if not user:
             return
         
-        subject, enc = decode_header(msg["Subject"])[0]
-        if isinstance(subject, bytes):
-            subject = subject.decode(enc or "utf-8")
+        subject = "Unknown"
+        try:
+            subject_raw, enc = decode_header(msg["Subject"])[0]
+            if isinstance(subject_raw, bytes):
+                subject = subject_raw.decode(enc or "utf-8")
+            else:
+                subject = subject_raw
+        except Exception as e:
+            logger.error(f"Failed to decode subject: {e}")
+        
         body = get_email_body(msg)
         
         logger.info(f"Processing email from {user.username}")
         
-        trips = parse_ticket_with_ai(subject, body, user.lang)
+        try:
+            trips = parse_ticket_with_ai(subject, body, user.lang)
+        except Exception as e:
+            logger.error(f"AI parsing failed: {e}")
+            send_error_email(user, subject, "Failed to analyze the email content.")
+            return
         
-        if trips:
-            logger.info(f"Found {len(trips)} trip(s)")
-            for parsed in trips:
-                create_trip_from_parsed(user, parsed)
-        else:
+        if not trips:
             logger.info("No trips found in email")
+            send_no_trips_email(user, subject)
+            return
+        
+        logger.info(f"Found {len(trips)} trip(s)")
+        created_trips = []
+        errors = []
+        
+        for i, parsed in enumerate(trips):
+            try:
+                trip = create_trip_from_parsed(user, parsed)
+                if trip:
+                    created_trips.append(trip)
+                else:
+                    errors.append(f"Trip {i+1}: Could not geocode locations")
+            except Exception as e:
+                logger.error(f"Failed to create trip {i+1}: {e}")
+                errors.append(f"Trip {i+1}: {str(e)}")
+        
+        if created_trips:
+            try:
+                send_confirmation_email(user, created_trips, subject)
+            except Exception as e:
+                logger.error(f"Failed to send confirmation email: {e}")
+            
+            if errors:
+                error_msg = f"Created {len(created_trips)} trip(s), but some failed: " + "; ".join(errors)
+                send_error_email(user, subject, error_msg)
+        else:
+            error_msg = "Could not create any trips. " + "; ".join(errors) if errors else "Unknown error occurred."
+            send_error_email(user, subject, error_msg)
 
 def email_listener():
     config = load_config()

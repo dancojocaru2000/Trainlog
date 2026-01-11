@@ -706,5 +706,18 @@
     "wrapped_stations": "állomások",
     "wrapped_share_image": "Megosztás",
     "wrapped_trips": "utazások",
-    "wrapped_kilometers": "kilométerek"
+    "wrapped_kilometers": "kilométerek",
+    "email_received": "Megkaptuk az e-mailjét.",
+    "email_success_subject": "Az utazásait hozzáadtuk a Trainloghoz.",
+    "email_success_title": "E-mail sikeresen feldolgozva!",
+    "email_trips_added": "Az utazás(ok) hozzáadásra került(ek) a fiókjához.",
+    "email_view_trips": "Tekintse meg az utazásait",
+    "email_error_subject": "Nem sikerült feldolgozni az e-mailjét - Trainlog",
+    "email_error_title": "Nem tudtuk feldolgozni az e-mailjét.",
+    "email_error_description": "Sajnos hiba történt a feldolgozás során:",
+    "email_error_advice": "Kérjük, ellenőrizze, hogy az e-mailje érvényes jegyigazolást tartalmaz-e, és próbálja újra, vagy adja hozzá az utazását manuálisan.",
+    "email_no_trips_subject": "Nem találtunk utazásokat az e-mailjében - Trainlog",
+    "email_no_trips_title": "Nem találtunk utazásokat",
+    "email_no_trips_description": "Nem találtunk érvényes utazásokat ebben az e-mailben. Kérjük, győződjön meg arról, hogy a jegyigazolást egy szállítótól származó e-mailt továbbít.",
+    "email_no_trips_formats": "A támogatott formátumok közé tartoznak a vonat-, repülő-, busz-, komp-, villamos- és metrójegyek."
 }

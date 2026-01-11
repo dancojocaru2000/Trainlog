@@ -706,5 +706,18 @@
     "wrapped_stations": "stasjoner",
     "wrapped_share_image": "Del",
     "wrapped_trips": "turer",
-    "wrapped_kilometers": "kilometer"
+    "wrapped_kilometers": "kilometer",
+    "email_received": "Vi har mottatt din e-post.",
+    "email_success_subject": "Dine reiser er lagt til i Trainlog.",
+    "email_success_title": "E-post behandlet vellykket!",
+    "email_trips_added": "Reise(r) har blitt lagt til i kontoen din.",
+    "email_view_trips": "Se dine reiser",
+    "email_error_subject": "Kunne ikke behandle e-posten din - Trainlog",
+    "email_error_title": "Vi kunne ikke behandle e-posten din.",
+    "email_error_description": "Dessverre oppstod det en feil under behandlingen:",
+    "email_error_advice": "Vennligst sjekk at e-posten din inneholder en gyldig billettbekreftelse og prøv igjen, eller legg til reisen din manuelt.",
+    "email_no_trips_subject": "Ingen reiser funnet i din e-post - Trainlog",
+    "email_no_trips_title": "Ingen reiser funnet",
+    "email_no_trips_description": "Vi kunne ikke finne noen gyldige reiser i denne e-posten. Vennligst sørg for at du videresender en billettbekreftelses-e-post fra en transportleverandør.",
+    "email_no_trips_formats": "Støttede formater inkluderer billetter for tog, fly, buss, ferge, trikk og metro."
 }

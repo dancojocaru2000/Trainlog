@@ -706,5 +706,18 @@
     "wrapped_stations": "Stations",
     "wrapped_share_image": "Delen",
     "wrapped_trips": "reizen",
-    "wrapped_kilometers": "kilometers"
+    "wrapped_kilometers": "kilometers",
+    "email_received": "We hebben uw e-mail ontvangen.",
+    "email_success_subject": "Uw reizen zijn toegevoegd aan Trainlog.",
+    "email_success_title": "E-mail succesvol verwerkt!",
+    "email_trips_added": "Reis(en) zijn aan uw account toegevoegd.",
+    "email_view_trips": "Bekijk uw reizen",
+    "email_error_subject": "Uw e-mail kon niet worden verwerkt - Trainlog",
+    "email_error_title": "We konden uw e-mail niet verwerken.",
+    "email_error_description": "Helaas, we zijn op een fout gestuit tijdens het verwerken:",
+    "email_error_advice": "Controleer of uw e-mail een geldige ticketbevestiging bevat en probeer het opnieuw, of voeg uw reis handmatig toe.",
+    "email_no_trips_subject": "Geen reizen gevonden in uw e-mail - Trainlog",
+    "email_no_trips_title": "Geen reizen gevonden",
+    "email_no_trips_description": "We konden geen geldige reizen in deze e-mail vinden. Zorg ervoor dat u een ticketbevestiging van een vervoerder doorstuurt.",
+    "email_no_trips_formats": "Ondersteunde formaten omvatten trein-, vliegtuig-, bus-, veerboot-, tram- en metrokaarten."
 }

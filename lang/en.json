@@ -706,5 +706,18 @@
     "wrapped_stations": "stations",
     "wrapped_share_image": "Share",
     "wrapped_trips": "trips",
-    "wrapped_kilometers": "kilometers"
+    "wrapped_kilometers": "kilometers",
+    "email_received": "We received your email",
+    "email_success_subject": "Your trips have been added to Trainlog",
+    "email_success_title": "Email processed successfully!",
+    "email_trips_added": "trip(s) have been added to your account",
+    "email_view_trips": "View your trips",
+    "email_error_subject": "Could not process your email - Trainlog",
+    "email_error_title": "We could not process your email",
+    "email_error_description": "Unfortunately, we encountered an error while processing it:",
+    "email_error_advice": "Please check that your email contains a valid ticket confirmation and try again, or add your trip manually.",
+    "email_no_trips_subject": "No trips found in your email - Trainlog",
+    "email_no_trips_title": "No trips found",
+    "email_no_trips_description": "We could not find any valid trips in this email. Please make sure you're forwarding a ticket confirmation email from a transport provider.",
+    "email_no_trips_formats": "Supported formats include train, flight, bus, ferry, tram, and metro tickets."
 }

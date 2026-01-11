@@ -706,5 +706,18 @@
     "wrapped_stations": "Stationen",
     "wrapped_share_image": "Teilen",
     "wrapped_trips": "Reisen",
-    "wrapped_kilometers": "Kilometer"
+    "wrapped_kilometers": "Kilometer",
+    "email_received": "Wir haben Ihre E-Mail erhalten.",
+    "email_success_subject": "Ihre Reisen wurden zu Trainlog hinzugefügt.",
+    "email_success_title": "E-Mail erfolgreich verarbeitet!",
+    "email_trips_added": "Reise(n) wurden zu Ihrem Konto hinzugefügt.",
+    "email_view_trips": "Sehen Sie Ihre Reisen an",
+    "email_error_subject": "Ihre E-Mail konnte nicht verarbeitet werden - Trainlog",
+    "email_error_title": "Wir konnten Ihre E-Mail nicht verarbeiten.",
+    "email_error_description": "Leider ist beim Verarbeiten ein Fehler aufgetreten:",
+    "email_error_advice": "Bitte überprüfen Sie, ob Ihre E-Mail eine gültige Ticketbestätigung enthält, und versuchen Sie es erneut, oder fügen Sie Ihre Reise manuell hinzu.",
+    "email_no_trips_subject": "Keine Reisen in Ihrer E-Mail gefunden - Trainlog",
+    "email_no_trips_title": "Keine Reisen gefunden",
+    "email_no_trips_description": "Wir konnten in dieser E-Mail keine gültigen Reisen finden. Bitte stellen Sie sicher, dass Sie eine Ticketbestätigungs-E-Mail von einem Verkehrsbetreiber weiterleiten.",
+    "email_no_trips_formats": "Unterstützte Formate umfassen Zug-, Flug-, Bus-, Fähren-, Straßenbahn- und U-Bahntickets."
 }

@@ -706,5 +706,18 @@
     "wrapped_stations": "Estações",
     "wrapped_share_image": "Partilhar",
     "wrapped_trips": "viagens",
-    "wrapped_kilometers": "quilómetros"
+    "wrapped_kilometers": "quilómetros",
+    "email_received": "Recebemos o seu e-mail.",
+    "email_success_subject": "As suas viagens foram adicionadas ao Trainlog.",
+    "email_success_title": "E-mail processado com sucesso!",
+    "email_trips_added": "A(s) viagem(viagens) foi(foram) adicionada(s) à sua conta.",
+    "email_view_trips": "Veja as suas viagens",
+    "email_error_subject": "Não foi possível processar o seu e-mail - Trainlog",
+    "email_error_title": "Não conseguimos processar o seu e-mail.",
+    "email_error_description": "Infelizmente, ocorreu um erro durante o processamento:",
+    "email_error_advice": "Por favor, verifique se o seu e-mail contém uma confirmação de bilhete válida e tente novamente, ou adicione a sua viagem manualmente.",
+    "email_no_trips_subject": "Não foram encontradas viagens no seu e-mail - Trainlog",
+    "email_no_trips_title": "Não foram encontradas viagens",
+    "email_no_trips_description": "Não conseguimos encontrar nenhuma viagem válida neste e-mail. Certifique-se de que está a encaminhar um e-mail de confirmação de bilhete de um fornecedor de transporte.",
+    "email_no_trips_formats": "Os formatos suportados incluem bilhetes de comboio, voo, autocarro, ferry, elétrico e metro."
 }

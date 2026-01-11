@@ -706,5 +706,18 @@
     "wrapped_stations": "Stanice",
     "wrapped_share_image": "Sdílet",
     "wrapped_trips": "výlety",
-    "wrapped_kilometers": "kilometry"
+    "wrapped_kilometers": "kilometry",
+    "email_received": "Obdrželi jsme váš e-mail.",
+    "email_success_subject": "Vaše cesty byly přidány do Trainlogu.",
+    "email_success_title": "E-mail byl úspěšně zpracován!",
+    "email_trips_added": "Cesty byly přidány na váš účet.",
+    "email_view_trips": "Zobrazit vaše cesty",
+    "email_error_subject": "Nepodařilo se zpracovat váš e-mail - Trainlog",
+    "email_error_title": "Nepodařilo se nám zpracovat váš e-mail.",
+    "email_error_description": "Bohužel, při jeho zpracování došlo k chybě:",
+    "email_error_advice": "Prosím, zkontrolujte, zda váš e-mail obsahuje platné potvrzení jízdenky, a zkuste to znovu, nebo přidejte svou cestu ručně.",
+    "email_no_trips_subject": "Ve vašem e-mailu nebyly nalezeny žádné cesty - Trainlog",
+    "email_no_trips_title": "Žádné cesty nebyly nalezeny",
+    "email_no_trips_description": "Nenašli jsme v tomto e-mailu žádné platné cesty. Ujistěte se, že přeposíláte e-mail s potvrzením jízdenky od poskytovatele dopravy.",
+    "email_no_trips_formats": "Podporované formáty zahrnují jízdenky na vlak, letadlo, autobus, trajekt, tramvaj a metro."
 }
