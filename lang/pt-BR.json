@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Nenhuma viagem encontrada no seu e-mail - Trainlog",
     "email_no_trips_title": "Nenhuma viagem encontrada",
     "email_no_trips_description": "Não conseguimos encontrar nenhuma viagem válida neste e-mail. Certifique-se de que está encaminhando um e-mail de confirmação de bilhete de um fornecedor de transporte.",
-    "email_no_trips_formats": "Os formatos suportados incluem bilhetes de trem, voo, ônibus, balsa, bonde e metrô."
+    "email_no_trips_formats": "Os formatos suportados incluem bilhetes de trem, voo, ônibus, balsa, bonde e metrô.",
+    "email_premium_subject": "Trainlog - Recurso premium",
+    "email_premium_title": "Recurso premium",
+    "email_premium_greeting": "Oi {username},",
+    "email_premium_description": "A análise de bilhetes de email é um recurso premium disponível para membros Trainlogger e superiores.",
+    "email_premium_cta": "Torne-se membro"
 }

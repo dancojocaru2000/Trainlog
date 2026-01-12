@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Ve vašem e-mailu nebyly nalezeny žádné cesty - Trainlog",
     "email_no_trips_title": "Žádné cesty nebyly nalezeny",
     "email_no_trips_description": "Nenašli jsme v tomto e-mailu žádné platné cesty. Ujistěte se, že přeposíláte e-mail s potvrzením jízdenky od poskytovatele dopravy.",
-    "email_no_trips_formats": "Podporované formáty zahrnují jízdenky na vlak, letadlo, autobus, trajekt, tramvaj a metro."
+    "email_no_trips_formats": "Podporované formáty zahrnují jízdenky na vlak, letadlo, autobus, trajekt, tramvaj a metro.",
+    "email_premium_subject": "Trainlog - Prémiová funkce",
+    "email_premium_title": "Prémiová funkce",
+    "email_premium_greeting": "Ahoj {username},",
+    "email_premium_description": "Zpracování emailových jízdenek je prémiová funkce dostupná pro členy Trainlogger a výše.",
+    "email_premium_cta": "Staňte se členem"
 }

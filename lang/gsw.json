@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Kei Riese in dim E-Mail gfunde - Trainlog",
     "email_no_trips_title": "Kei Riese gfunde",
     "email_no_trips_description": "Mir hei kei gültigi Riese in däm E-Mail gfunde. Bitte sicher di, dass du e Billetconfirmig vo äm Transportunternehmig wyterleitisch.",
-    "email_no_trips_formats": "Unterstützti Format beinhaltet Zug-, Flug-, Bus-, Fähr-, Tram- und Metro-Billette."
+    "email_no_trips_formats": "Unterstützti Format beinhaltet Zug-, Flug-, Bus-, Fähr-, Tram- und Metro-Billette.",
+    "email_premium_subject": "Trainlog - Premium-Funktion",
+    "email_premium_title": "Premium-Funktion",
+    "email_premium_greeting": "Hoi {username},",
+    "email_premium_description": "E-Mail-Ticket-Verarbeitung isch e Premium-Funktion, verfügbor für Trainlogger-Mitglieder und dervo obe.",
+    "email_premium_cta": "Werde Mitglied"
 }

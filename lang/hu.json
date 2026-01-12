@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Nem találtunk utazásokat az e-mailjében - Trainlog",
     "email_no_trips_title": "Nem találtunk utazásokat",
     "email_no_trips_description": "Nem találtunk érvényes utazásokat ebben az e-mailben. Kérjük, győződjön meg arról, hogy a jegyigazolást egy szállítótól származó e-mailt továbbít.",
-    "email_no_trips_formats": "A támogatott formátumok közé tartoznak a vonat-, repülő-, busz-, komp-, villamos- és metrójegyek."
+    "email_no_trips_formats": "A támogatott formátumok közé tartoznak a vonat-, repülő-, busz-, komp-, villamos- és metrójegyek.",
+    "email_premium_subject": "Trainlog - Prémium funkció",
+    "email_premium_title": "Prémium funkció",
+    "email_premium_greeting": "Szia {username},",
+    "email_premium_description": "Az emailes jegyek feldolgozása egy prémium funkció, amely a Trainlogger tagok és afelett érhetők el.",
+    "email_premium_cta": "Legyen tag"
 }

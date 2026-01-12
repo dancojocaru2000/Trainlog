@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Sähköpostistasi ei löytynyt matkoja - Trainlog",
     "email_no_trips_title": "Ei matkoja löytynyt",
     "email_no_trips_description": "Emme löytäneet tästä sähköpostista yhtään kelvollista matkaa. Varmista, että välität liikennöitsijältä saamasi lipunvahvistussähköpostin.",
-    "email_no_trips_formats": "Tuetut muodot sisältävät juna-, lento-, bussi-, lautta-, raitiovaunu- ja metroliput."
+    "email_no_trips_formats": "Tuetut muodot sisältävät juna-, lento-, bussi-, lautta-, raitiovaunu- ja metroliput.",
+    "email_premium_subject": "Trainlog - Premium-ominaisuus",
+    "email_premium_title": "Premium-ominaisuus",
+    "email_premium_greeting": "Hei {username},",
+    "email_premium_description": "Sähköpostilipun jäsennys on premium-ominaisuus, joka on saatavilla Trainlogger-jäsenille ja sitä ylemmille.",
+    "email_premium_cta": "Liity jäseneksi"
 }

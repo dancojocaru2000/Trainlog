@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Aucun trajet trouvé dans votre email - Trainlog",
     "email_no_trips_title": "Aucun trajet trouvé",
     "email_no_trips_description": "Nous n'avons trouvé aucun trajet valide dans cet email. Veuillez vous assurer de transférer un email de confirmation de billet d'un transporteur.",
-    "email_no_trips_formats": "Les formats supportés incluent les billets de train, avion, bus, ferry, tram et métro."
+    "email_no_trips_formats": "Les formats supportés incluent les billets de train, avion, bus, ferry, tram et métro.",
+    "email_premium_subject": "Trainlog - Fonctionnalité premium",
+    "email_premium_title": "Fonctionnalité premium",
+    "email_premium_greeting": "Bonjour {username},",
+    "email_premium_description": "L'analyse des billets par email est une fonctionnalité premium disponible pour les membres Trainlogger et supérieur.",
+    "email_premium_cta": "Devenir membre"
 }

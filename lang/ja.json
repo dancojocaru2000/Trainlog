@@ -719,5 +719,10 @@
     "email_no_trips_subject": "メール内に旅行が見つかりませんでした - Trainlog",
     "email_no_trips_title": "旅行が見つかりませんでした。",
     "email_no_trips_description": "このメールに有効な旅行が見つかりませんでした。交通機関からのチケット確認メールを転送していることを確認してください。",
-    "email_no_trips_formats": "サポートされている形式には、電車、飛行機、バス、フェリー、路面電車、地下鉄のチケットが含まれます。"
+    "email_no_trips_formats": "サポートされている形式には、電車、飛行機、バス、フェリー、路面電車、地下鉄のチケットが含まれます。",
+    "email_premium_subject": "Trainlog - プレミアム機能",
+    "email_premium_title": "プレミアム機能",
+    "email_premium_greeting": "こんにちは {username},",
+    "email_premium_description": "メールチケット解析は、Trainloggerメンバー以上が利用できるプレミアム機能です。",
+    "email_premium_cta": "メンバーになる"
 }

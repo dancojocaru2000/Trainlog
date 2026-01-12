@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Nema pronađenih putovanja u vašoj e-pošti - Trainlog",
     "email_no_trips_title": "Nema pronađenih putovanja",
     "email_no_trips_description": "Nismo mogli pronaći nijedno važeće putovanje u ovoj e-pošti. Molimo vas da provjerite šaljete li e-poštu s potvrdom karte od prijevoznika.",
-    "email_no_trips_formats": "Podržani formati uključuju karte za vlak, let, autobus, trajekt, tramvaj i metro."
+    "email_no_trips_formats": "Podržani formati uključuju karte za vlak, let, autobus, trajekt, tramvaj i metro.",
+    "email_premium_subject": "Trainlog - Premium značajka",
+    "email_premium_title": "Premium značajka",
+    "email_premium_greeting": "Bok {username},",
+    "email_premium_description": "Raščlamba email karata je premium značajka dostupna članovima Trainloggera i višima.",
+    "email_premium_cta": "Postani član"
 }

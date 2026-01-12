@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Inga resor hittades i ditt e-postmeddelande - Trainlog",
     "email_no_trips_title": "Inga resor hittades",
     "email_no_trips_description": "Vi kunde inte hitta några giltiga resor i detta e-postmeddelande. Se till att du vidarebefordrar ett biljettsbekräftelsemeddelande från en transportleverantör.",
-    "email_no_trips_formats": "Stödda format inkluderar tåg-, flyg-, buss-, färje-, spårvagns- och tunnelbanebiljetter."
+    "email_no_trips_formats": "Stödda format inkluderar tåg-, flyg-, buss-, färje-, spårvagns- och tunnelbanebiljetter.",
+    "email_premium_subject": "Trainlog - Premiumfunktion",
+    "email_premium_title": "Premiumfunktion",
+    "email_premium_greeting": "Hej {username},",
+    "email_premium_description": "E-postbiljettbearbetning är en premiumfunktion tillgänglig för Trainlogger-medlemmar och ovan.",
+    "email_premium_cta": "Bli medlem"
 }

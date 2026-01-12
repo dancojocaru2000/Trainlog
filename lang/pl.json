@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Nie znaleziono podróży w Twoim e-mailu - Trainlog",
     "email_no_trips_title": "Nie znaleziono podróży",
     "email_no_trips_description": "Nie znaleźliśmy żadnych ważnych podróży w tym e-mailu. Proszę upewnić się, że przekazujesz e-mail potwierdzający bilet od dostawcy transportu.",
-    "email_no_trips_formats": "Obsługiwane formaty obejmują bilety na pociąg, lot, autobus, prom, tramwaj i metro."
+    "email_no_trips_formats": "Obsługiwane formaty obejmują bilety na pociąg, lot, autobus, prom, tramwaj i metro.",
+    "email_premium_subject": "Trainlog - Funkcja premium",
+    "email_premium_title": "Funkcja premium",
+    "email_premium_greeting": "Cześć {username},",
+    "email_premium_description": "Analiza biletów e-mail jest funkcją premium dostępną dla członków Trainlogger i wyżej.",
+    "email_premium_cta": "Zostań członkiem"
 }

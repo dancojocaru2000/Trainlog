@@ -719,5 +719,10 @@
     "email_no_trips_subject": "이메일에서 여행을 찾을 수 없습니다 - Trainlog",
     "email_no_trips_title": "여행을 찾을 수 없습니다.",
     "email_no_trips_description": "이 이메일에서 유효한 여행을 찾을 수 없습니다. 운송 제공업체에서 발송한 티켓 확인 이메일을 전달하고 있는지 확인하십시오.",
-    "email_no_trips_formats": "지원되는 형식에는 기차, 항공, 버스, 페리, 트램 및 지하철 티켓이 포함됩니다."
+    "email_no_trips_formats": "지원되는 형식에는 기차, 항공, 버스, 페리, 트램 및 지하철 티켓이 포함됩니다.",
+    "email_premium_subject": "Trainlog - 프리미엄 기능",
+    "email_premium_title": "프리미엄 기능",
+    "email_premium_greeting": "안녕하세요 {username},",
+    "email_premium_description": "이메일 티켓 파싱은 Trainlogger 회원 이상에게 제공되는 프리미엄 기능입니다.",
+    "email_premium_cta": "회원이 되기"
 }

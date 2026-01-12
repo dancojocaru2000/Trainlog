@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Ingen rejser fundet i din e-mail - Trainlog",
     "email_no_trips_title": "Ingen rejser fundet",
     "email_no_trips_description": "Vi kunne ikke finde nogen gyldige rejser i denne e-mail. Sørg venligst for, at du videresender en billetbekræftelse fra en transportudbyder.",
-    "email_no_trips_formats": "Understøttede formater inkluderer tog-, fly-, bus-, færge-, sporvogns- og metrobilletter."
+    "email_no_trips_formats": "Understøttede formater inkluderer tog-, fly-, bus-, færge-, sporvogns- og metrobilletter.",
+    "email_premium_subject": "Trainlog - Premiumfunktion",
+    "email_premium_title": "Premiumfunktion",
+    "email_premium_greeting": "Hej {username},",
+    "email_premium_description": "E-mail billetbehandling er en premiumfunktion tilgængelig for Trainlogger-medlemmer og derover.",
+    "email_premium_cta": "Bliv medlem"
 }

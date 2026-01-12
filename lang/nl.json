@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Geen reizen gevonden in uw e-mail - Trainlog",
     "email_no_trips_title": "Geen reizen gevonden",
     "email_no_trips_description": "We konden geen geldige reizen in deze e-mail vinden. Zorg ervoor dat u een ticketbevestiging van een vervoerder doorstuurt.",
-    "email_no_trips_formats": "Ondersteunde formaten omvatten trein-, vliegtuig-, bus-, veerboot-, tram- en metrokaarten."
+    "email_no_trips_formats": "Ondersteunde formaten omvatten trein-, vliegtuig-, bus-, veerboot-, tram- en metrokaarten.",
+    "email_premium_subject": "Trainlog - Premiumfunctie",
+    "email_premium_title": "Premiumfunctie",
+    "email_premium_greeting": "Hallo {username},",
+    "email_premium_description": "E-mailticketverwerking is een premiumfunctie beschikbaar voor Trainlogger-leden en hoger.",
+    "email_premium_cta": "Lid worden"
 }

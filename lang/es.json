@@ -719,5 +719,10 @@
     "email_no_trips_subject": "No se encontraron viajes en tu correo electrónico - Trainlog",
     "email_no_trips_title": "No se encontraron viajes",
     "email_no_trips_description": "No pudimos encontrar ningún viaje válido en este correo electrónico. Por favor, asegúrate de estar reenviando un correo de confirmación de billete de un proveedor de transporte.",
-    "email_no_trips_formats": "Los formatos compatibles incluyen billetes de tren, vuelo, autobús, ferry, tranvía y metro."
+    "email_no_trips_formats": "Los formatos compatibles incluyen billetes de tren, vuelo, autobús, ferry, tranvía y metro.",
+    "email_premium_subject": "Trainlog - Función premium",
+    "email_premium_title": "Función premium",
+    "email_premium_greeting": "Hola {username},",
+    "email_premium_description": "El análisis de boletos por correo electrónico es una función premium disponible para los miembros de Trainlogger y superiores.",
+    "email_premium_cta": "Hacerse miembro"
 }

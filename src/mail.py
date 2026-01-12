@@ -104,10 +104,33 @@ def get_user_from_sender(sender_raw):
     user = User.query.filter_by(email=email_address).first()
     if not user:
         logger.info(f"No user found for email: {email_address}")
+        try:
+            sendEmail(
+                email_address,
+                "Trainlog - Email not recognized",
+                """<h2>Email not recognized</h2>
+                <p>We received your email but could not find a Trainlog account associated with this address.</p>
+                <p>Please make sure you're sending from the email address registered with your Trainlog account.</p>
+                <p><a href="https://trainlog.me">Visit Trainlog</a></p>"""
+            )
+        except Exception as e:
+            logger.error(f"Failed to send unrecognized email notice: {e}")
         return None
     
     if not user.premium:
         logger.info(f"User {user.username} is not premium, ignoring email")
+        l = lang.get(user.lang, lang["en"])
+        try:
+            sendEmail(
+                email_address,
+                l["email_premium_subject"],
+                f"""<h2>{l["email_premium_title"]}</h2>
+                <p>{l["email_premium_greeting"].format(username=user.username)}</p>
+                <p>{l["email_premium_description"]}</p>
+                <p><a href="https://buymeacoffee.com/trainlog/membership">{l["email_premium_cta"]}</a></p>"""
+            )
+        except Exception as e:
+            logger.error(f"Failed to send premium notice: {e}")
         return None
     
     return user
@@ -397,6 +420,7 @@ def create_trip_from_parsed(user, parsed_trip):
                 utc_end_datetime = local_end.astimezone(pytz.UTC).replace(tzinfo=None)
         else:
             end_datetime = start_datetime
+            utc_end_datetime = utc_start_datetime
         
         if dep_time and arr_time and utc_start_datetime and utc_end_datetime:
             estimated_duration = int((utc_end_datetime - utc_start_datetime).total_seconds())

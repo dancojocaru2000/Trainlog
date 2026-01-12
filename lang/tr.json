@@ -719,5 +719,10 @@
     "email_no_trips_subject": "E-postanızda hiçbir gezi bulunamadı - Trainlog",
     "email_no_trips_title": "Hiçbir gezi bulunamadı.",
     "email_no_trips_description": "Bu e-postada geçerli bir gezi bulamadık. Lütfen bir ulaşım sağlayıcısından bilet onay e-postası ilettiğinizden emin olun.",
-    "email_no_trips_formats": "Desteklenen formatlar arasında tren, uçak, otobüs, feribot, tramvay ve metro biletleri bulunur."
+    "email_no_trips_formats": "Desteklenen formatlar arasında tren, uçak, otobüs, feribot, tramvay ve metro biletleri bulunur.",
+    "email_premium_subject": "Trainlog - Premium özellik",
+    "email_premium_title": "Premium özellik",
+    "email_premium_greeting": "Merhaba {username},",
+    "email_premium_description": "E-posta bilet çözümleme, Trainlogger üyeleri ve üzeri için mevcut bir premium özelliktir.",
+    "email_premium_cta": "Üye ol"
 }

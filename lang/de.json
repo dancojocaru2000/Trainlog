@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Keine Reisen in Ihrer E-Mail gefunden - Trainlog",
     "email_no_trips_title": "Keine Reisen gefunden",
     "email_no_trips_description": "Wir konnten in dieser E-Mail keine gültigen Reisen finden. Bitte stellen Sie sicher, dass Sie eine Ticketbestätigungs-E-Mail von einem Verkehrsbetreiber weiterleiten.",
-    "email_no_trips_formats": "Unterstützte Formate umfassen Zug-, Flug-, Bus-, Fähren-, Straßenbahn- und U-Bahntickets."
+    "email_no_trips_formats": "Unterstützte Formate umfassen Zug-, Flug-, Bus-, Fähren-, Straßenbahn- und U-Bahntickets.",
+    "email_premium_subject": "Trainlog - Premium-Funktion",
+    "email_premium_title": "Premium-Funktion",
+    "email_premium_greeting": "Hallo {username},",
+    "email_premium_description": "E-Mail-Ticket-Verarbeitung ist eine Premium-Funktion, die für Trainlogger-Mitglieder und höher verfügbar ist.",
+    "email_premium_cta": "Mitglied werden"
 }

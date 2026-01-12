@@ -719,5 +719,10 @@
     "email_no_trips_subject": "Teie meilist ei leitud ühtegi reisi - Trainlog",
     "email_no_trips_title": "Reise ei leitud",
     "email_no_trips_description": "Me ei leidnud sellest meilist ühtegi kehtivat reisi. Palun veenduge, et edastate piletikinnituse e-kirja transpordipakkujalt.",
-    "email_no_trips_formats": "Toetatud formaadid hõlmavad rongi-, lennu-, bussi-, parvlaeva-, trammi- ja metroopileteid."
+    "email_no_trips_formats": "Toetatud formaadid hõlmavad rongi-, lennu-, bussi-, parvlaeva-, trammi- ja metroopileteid.",
+    "email_premium_subject": "Trainlog - Premiumfunktsioon",
+    "email_premium_title": "Premiumfunktsioon",
+    "email_premium_greeting": "Tere {username},",
+    "email_premium_description": "E-kirja piletite töötlemine on premiumfunktsioon, mis on saadaval Trainloggeri liikmetele ja kõrgematele.",
+    "email_premium_cta": "Hakka liikmeks"
 }

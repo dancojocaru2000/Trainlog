@@ -719,5 +719,10 @@
     "email_no_trips_subject": "No trips found in your email - Trainlog",
     "email_no_trips_title": "No trips found",
     "email_no_trips_description": "We could not find any valid trips in this email. Please make sure you're forwarding a ticket confirmation email from a transport provider.",
-    "email_no_trips_formats": "Supported formats include train, flight, bus, ferry, tram, and metro tickets."
+    "email_no_trips_formats": "Supported formats include train, flight, bus, ferry, tram, and metro tickets.",
+    "email_premium_subject": "Trainlog - Premium feature",
+    "email_premium_title": "Premium feature",
+    "email_premium_greeting": "Hi {username},",
+    "email_premium_description": "Email ticket parsing is a premium feature available to Trainlogger members and above.",
+    "email_premium_cta": "Become a member"
 }
