@@ -2,7 +2,6 @@ import json
 import re
 import smtplib
 import sqlite3
-import requests
 from contextlib import contextmanager
 from datetime import datetime
 from email.mime.text import MIMEText
@@ -11,13 +10,14 @@ from glob import glob
 from inspect import getcallargs
 
 import pytz
-from flask import abort, request, session, redirect, url_for
+import requests
+from flask import abort, redirect, request, session, url_for
 from timezonefinder import TimezoneFinder
 
 from py.sql import getCurrentTrip
 from py.utils import load_config
 from src.consts import DbNames
-from src.users import User, Friendship, authDb
+from src.users import Friendship, User, authDb
 
 pathConn = sqlite3.connect(DbNames.PATH_DB.value, check_same_thread=False)
 pathConn.row_factory = sqlite3.Row
@@ -64,6 +64,7 @@ def owner_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
 
 def getUser():
     return session.get("logged_in") if session.get("logged_in") else "public"
@@ -177,6 +178,7 @@ def sendEmail(address, subject, message):
     except Exception as e:
         print("Error:", e)
 
+
 def sendEmailToUser(user_id, subject, message):
     try:
         user = User.query.filter_by(uid=user_id).first()
@@ -190,6 +192,7 @@ def sendEmailToUser(user_id, subject, message):
     except Exception as e:
         print("Error sending email to user:", e)
         return False
+
 
 def sendOwnerEmail(subject, message):
     address = load_config()["owner"]["email"]
@@ -233,42 +236,56 @@ def listOperatorsLogos(tripType=None):
 
     return logoURLs
 
-def post_to_discord(webhook_type, title, description, url=None, fields=None, color=0x5865F2, footer_text=None):
+
+def post_to_discord(
+    webhook_type,
+    title,
+    description,
+    url=None,
+    fields=None,
+    color=0x5865F2,
+    footer_text=None,
+):
     try:
         webhook_url = load_config()["discord"][webhook_type]
         embed_data = {
-            "embeds": [{
-                "title": title,
-                "description": description[:4096],  # Discord's max description length
-                "color": color,
-                "timestamp": datetime.utcnow().isoformat()
-            }]
+            "embeds": [
+                {
+                    "title": title,
+                    "description": description[
+                        :4096
+                    ],  # Discord's max description length
+                    "color": color,
+                    "timestamp": datetime.utcnow().isoformat(),
+                }
+            ]
         }
-        
+
         # Add URL if provided (makes title clickable)
         if url:
             embed_data["embeds"][0]["url"] = url
-       
+
         # Add fields if provided
         if fields:
             embed_data["embeds"][0]["fields"] = fields
-       
+
         # Add footer if provided
         if footer_text:
             embed_data["embeds"][0]["footer"] = {"text": footer_text}
-       
+
         response = requests.post(
             webhook_url,
             data=json.dumps(embed_data),
             headers={"Content-Type": "application/json"},
-            timeout=5
+            timeout=5,
         )
-       
+
         return response.status_code == 204
-       
+
     except Exception as e:
         print(f"Discord webhook failed: {e}")
         return False
+
 
 def public_required(f):
     @wraps(f)
@@ -406,19 +423,62 @@ def fr24_usage(username):
         row = cursor.fetchone() or (0,)
     return row[0]
 
+
 def get_default_trip_visibility(x):
     match x:
-        case "accommodation": return "private"
-        case "aerialway": return "public"
-        case "bus": return "public"
-        case "car": return "private"
-        case "cycle": return "private"
-        case "ferry": return "public"
-        case "helicopter": return "public"
-        case "metro": return "public"
-        case "poi": return "private"
-        case "restaurant": return "private"
-        case "train": return "public"
-        case "tram": return "public"
-        case "walk": return "private"
-        case _: return "public"
+        case "accommodation":
+            return "private"
+        case "aerialway":
+            return "public"
+        case "bus":
+            return "public"
+        case "car":
+            return "private"
+        case "cycle":
+            return "private"
+        case "ferry":
+            return "public"
+        case "helicopter":
+            return "public"
+        case "metro":
+            return "public"
+        case "poi":
+            return "private"
+        case "restaurant":
+            return "private"
+        case "train":
+            return "public"
+        case "tram":
+            return "public"
+        case "walk":
+            return "private"
+        case _:
+            return "public"
+
+
+def current_user_is_friend_with(target_username):
+    current_user = getUser()
+    if current_user != "public":
+        current_user_id = User.query.filter_by(username=current_user).first().uid
+        target_user_id = (
+            authDb.session.query(User.uid, User.username)
+            .filter(User.username == target_username)
+            .first()
+            .uid
+        )
+        return (
+            current_user_id == target_user_id
+            or (
+                authDb.session.query(User.uid, User.username)
+                .join(Friendship, User.uid == Friendship.friend_id)
+                .filter(
+                    Friendship.user_id == target_user_id,
+                    Friendship.friend_id == current_user_id,
+                    Friendship.accepted is not None,
+                )
+                .first()
+            )
+            is not None
+        )
+    else:
+        return 0

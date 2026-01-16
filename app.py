@@ -212,7 +212,8 @@ from src.utils import (
     translator_required,
     check_and_increment_fr24_usage,
     fr24_usage,
-    get_default_trip_visibility
+    get_default_trip_visibility,
+    current_user_is_friend_with
 )
 from src.trips import (
     Trip,
@@ -3549,6 +3550,8 @@ def render_public_trip_page(
     if not tripIds:
         abort(410)
 
+    #array keeping track of who the current user is friends with, so that each target user only needs to be queried once in the DB.
+    friends_cache = []
     trip_list = []
     for trip_id in tripIds.split(","):
         with managed_cursor(mainConn) as cursor:
@@ -3560,12 +3563,20 @@ def render_public_trip_page(
             length += trip["trip_length"]
             trip_list.append(dict(trip))
             user = User.query.filter_by(username=trip["username"]).first()
+            if trip['visibility'] == 'private' and not session.get(user.username):
+                abort(401)
+            if trip['visibility'] == 'friends' and not session.get(user.username) and not user.username in friends_cache:
+                if current_user_is_friend_with(user.username):
+                    friends_cache.append(user.username)
+                else:
+                    abort(401)
             if (
                 not session.get(user.username)
                 and not user.is_public_trips()
                 and not session.get(owner)
             ):
                 abort(401)
+
         else:
             abort(410)
 
@@ -5108,23 +5119,6 @@ def fetchTripsPaths(username, lastLocal, public):
     tripList = []
     now = datetime.now()
 
-    currentUser = getUser()
-    if currentUser != 'public':
-        currentUserId = User.query.filter_by(username=currentUser).first().uid
-        targetUserId = (
-            authDb.session.query(User.uid, User.username)
-            .filter(User.username == username)
-            .first().uid
-        )
-        is_friend = currentUserId == targetUserId or (
-            authDb.session.query(User.uid, User.username)
-            .join(Friendship, User.uid == Friendship.friend_id)
-            .filter(Friendship.user_id == targetUserId, Friendship.friend_id == currentUserId, Friendship.accepted != None)
-            .first()
-        ) is not None
-    else:
-        is_friend = 0
-
     with managed_cursor(mainConn) as cursor:
         idList = [
             row["uid"]
@@ -5135,7 +5129,7 @@ def fetchTripsPaths(username, lastLocal, public):
 
         trips = cursor.execute(
             getUniqueUserTrips,
-            {"username": username, "lastLocal": lastLocal, "public": public, "friend": is_friend},
+            {"username": username, "lastLocal": lastLocal, "public": public, "friend": current_user_is_friend_with(username)},
         ).fetchall()
 
     trips.reverse()
@@ -5638,23 +5632,7 @@ def get_trips_api_internal(username, is_public=False):
     past = int(request.args.get("projects") == "False")
     filter_types = request.form.get("filterTypes", type=int, default=0)
 
-    currentUser = getUser()
-    if currentUser != 'public':
-        currentUserId = User.query.filter_by(username=currentUser).first().uid
-        targetUserId = (
-            authDb.session.query(User.uid, User.username)
-            .filter(User.username == username)
-            .first().uid
-        )
-        is_friend = currentUserId == targetUserId or (
-                        authDb.session.query(User.uid, User.username)
-                        .join(Friendship, User.uid == Friendship.friend_id)
-                        .filter(Friendship.user_id == targetUserId, Friendship.friend_id == currentUserId,
-                                Friendship.accepted != None)
-                        .first()
-                    ) is not None
-    else:
-        is_friend = 0
+    is_friend = current_user_is_friend_with(username)
 
     # Sorting parameters
     sort_column = request.form.get("order[0][column]", type=int, default=3)
