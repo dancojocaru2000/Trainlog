@@ -84,6 +84,7 @@ def get_all_countries():
         country.alpha_2: get_flag_emoji(country.alpha_2)
         for country in pycountry.countries
     }
+    country_dict['XK'] = get_flag_emoji("XK")
     return country_dict
 
 
