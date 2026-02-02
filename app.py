@@ -158,6 +158,7 @@ from src.api.finance import finance_blueprint
 from src.api.carbon import carbon_blueprint
 from src.api.wrapped import wrapped_blueprint
 from src.api.stats import stats_blueprint, fetch_stats, get_distinct_stat_years
+from src.api.ai import ai_blueprint
 from src.consts import DbNames, TripTypes
 from src.pg import setup_db
 from src.suspicious_activity import (
@@ -203,7 +204,7 @@ from src.trips import (
 from src.paths import Path
 from src.carbon import *
 from src.users import User, Friendship, authDb
-from src.mail import start_email_listener
+from src.email_parser import start_email_listener
 from src.routing import forward_routing_core
 
 app = Flask(__name__)
@@ -221,6 +222,7 @@ app.register_blueprint(news_blueprint)
 app.register_blueprint(carbon_blueprint)
 app.register_blueprint(stats_blueprint)
 app.register_blueprint(wrapped_blueprint)
+app.register_blueprint(ai_blueprint)
 
 app.config["CACHE_TYPE"] = "SimpleCache"
 app.config["CACHE_DEFAULT_TIMEOUT"] = 864000
