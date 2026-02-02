@@ -169,6 +169,7 @@ def parse_trip_with_ai(text, user_lang="en", image_base64=None, image_mime=None,
     
     prompt = f"""Extract all trips from this text/image.
 A trip is ONE segment (e.g., a flight with one connection = 2 trips).
+Ignore walking trips that are between two public transit trips unless specified
 
 Return ONLY valid JSON array, no markdown:
 [{{
