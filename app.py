@@ -4671,10 +4671,15 @@ def stationAutocomplete():
     timeout = 2
     en = "lang=en"
     
+    # Check if this is a reverse geocoding request
+    params = request.args
+    is_reverse = params.get("lat") and params.get("lon")
+    endpoint = "/reverse" if is_reverse else "/api"
+    
     responseJson = None
     for url in photonInstances.values():
         try:
-            resp = requests.get(f"{url}/api?{args}&{en}", timeout=timeout)
+            resp = requests.get(f"{url}{endpoint}?{args}&{en}", timeout=timeout)
             resp.raise_for_status()
             responseJson = resp.json()
             if responseJson.get("features") is not None:
@@ -4686,19 +4691,15 @@ def stationAutocomplete():
         return "Photon Error", 500
     
     homonymy_filter = {}
-
     for index, result in enumerate(responseJson["features"]):
         props = result["properties"]
-
         # Special country handling
         special_countries = ["CN", "FI"]
         if props.get("countrycode") in special_countries:
             lon, lat = result["geometry"]["coordinates"]
             manual_country = getCountryFromCoordinates(lat, lon)
             props["countrycode"] = manual_country["countryCode"]
-
         country_code = props.get("countrycode", "unknown")
-
         # Add city name if not similar to name
         city = props.get("city")
         if city and stringSimmilarity(city.lower(), props["name"].lower()) < 50:
@@ -4716,18 +4717,14 @@ def stationAutocomplete():
                 or (not district and not locality)
             ):
                 props["name"] = f"{city} - {props['name']}"
-
         # Homonymy by name and country
         key = (props["name"], country_code)
-
         if key in homonymy_filter:
             homonymy_filter[key]["count"] += 1
             homonymy_filter[key]["states"].append(props.get("state"))
         else:
             homonymy_filter[key] = {"count": 1, "states": [props.get("state")]}
-
         responseJson["features"][index]["properties"] = props
-
     # Resolve homonyms
     for (name, country), details in homonymy_filter.items():
         if details["count"] > 1:
@@ -4746,9 +4743,7 @@ def stationAutocomplete():
                     if props["name"] == name and props.get("countrycode") == country:
                         props["homonymy_order"] = f" ({chr(suffix)})"
                         suffix += 1
-
     return jsonify(responseJson)
-
 
 @app.route("/u/<username>/getManAndOps/<station_type>", methods=["GET", "POST"])
 def getManAndOps(username, station_type):
