@@ -97,6 +97,7 @@ def get_coords_from_past_trips(station_name, trip_type="train"):
                 FROM trips
                 WHERE trip_type = :trip_type
                   AND (origin_station % :name OR destination_station % :name)
+                  AND visibility = 'public'             
                 ORDER BY sim DESC
                 LIMIT 1
             """, {"name": station_name, "trip_type": trip_type}).fetchone()
