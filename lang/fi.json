@@ -324,6 +324,7 @@
     "ticket_list": "Lippuluettelo",
     "nav_tickets": "Liput",
     "ticket_name": "Lipun nimi",
+    "show_inactive_tickets": "Näytä passiiviset liput",
     "enter_ticket_name": "Syötä lipun nimi",
     "purchasing_date": "Ostopäivämäärä",
     "enter_ticket_price": "Syötä lipun hinta",

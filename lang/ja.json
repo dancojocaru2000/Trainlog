@@ -324,6 +324,7 @@
     "ticket_list": "チケットリスト",
     "nav_tickets": "チケット",
     "ticket_name": "チケット名",
+    "show_inactive_tickets": "非アクティブなチケットを表示",
     "enter_ticket_name": "チケット名を入力",
     "purchasing_date": "購入日",
     "enter_ticket_price": "チケット価格を入力",

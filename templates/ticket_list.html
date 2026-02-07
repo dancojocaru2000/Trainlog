@@ -15,6 +15,14 @@
     <div class="row">
         <div class="col-12">
             <h2 class="mb-4">{{nav_tickets}}</h2>
+
+            <!-- NEW: toggle inactive tickets (DataTables-native filtering; no CSS hide) -->
+            <div class="mb-3">
+                <button id="toggleInactiveTickets" type="button" class="btn btn-outline-secondary btn-sm">
+                    <i class="fa-regular fa-eye"></i> {{show_inactive_tickets}}
+                </button>
+            </div>
+
             <div class="table-responsive">
                 <table id="ticketsTable" class="table table-hover w-100">
                     <thead class="table-light">
@@ -33,7 +41,8 @@
                     </thead>
                     <tbody>
                         {% for ticket in tickets %}
-                        <tr id="row_{{ ticket.uid }}">
+                        <!-- CHANGED: add inactive marker class only -->
+                        <tr id="row_{{ ticket.uid }}" class="{% if not ticket.active %}ticket-inactive{% endif %}">
                             <td class="px-3 py-3 fw-medium border-0">{{ ticket.name }}</td>
                             <td class="px-3 py-3 price-format border-0" data-price="{{ ticket.price }}" data-currency="{{ ticket.currency }}" data-user-price="{{ ticket.price_in_user_currency }}" data-user-currency="{{ ticket.user_currency }}">
                                 <span><span style="display:none;" class="price-format-hidden" data-price="{{ ticket.price }}" data-currency="{{ ticket.currency }}" data-user-price="{{ ticket.price_in_user_currency }}" data-user-currency="{{ ticket.user_currency }}">{{ ticket.price_in_user_currency }}</span></span>
@@ -175,6 +184,17 @@ table > :not(:first-child) {
 
 <script>
 $(document).ready(function () {
+
+    /* NEW: DataTables native filtering for inactive rows (so they DON'T take paging space) */
+    var showInactiveTickets = false;
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        if (settings.nTable.id !== 'ticketsTable') return true;
+        if (showInactiveTickets) return true;
+
+        var rowNode = settings.aoData[dataIndex].nTr;
+        return !$(rowNode).hasClass('ticket-inactive');
+    });
+
     var table = $('#ticketsTable').DataTable({
         responsive: {
             details: {
@@ -219,6 +239,19 @@ $(document).ready(function () {
                 }
             }
         }
+    });
+
+    /* NEW: button toggles filter and redraws */
+    $('#toggleInactiveTickets').off('click').on('click', function () {
+        showInactiveTickets = !showInactiveTickets;
+
+        if (showInactiveTickets) {
+            $(this).html('<i class="fa-regular fa-eye-slash"></i> {{hide_inactive_tickets}}');
+        } else {
+            $(this).html('<i class="fa-regular fa-eye"></i> {{show_inactive_tickets}}');
+        }
+
+        table.draw(); // recalculates paging correctly
     });
 
     function updateTable() {
@@ -281,6 +314,7 @@ $(document).ready(function () {
         $('.ticket-active-checkbox').off('change').on('change', function () {
             var ticketId = $(this).data('ticket-id');
             var isActive = $(this).is(':checked');
+            var row = $('#row_' + ticketId);
 
             $.ajax({
                 url: '/u/{{ username }}/toggle_ticket_active/' + ticketId,
@@ -292,7 +326,16 @@ $(document).ready(function () {
                         alert('Error: ' + response.error);
                         // Revert the checkbox state if the update failed
                         $(this).prop('checked', !isActive);
+                        return;
                     }
+
+                    /* NEW: keep row class in sync and redraw to apply filter */
+                    if (isActive) {
+                        row.removeClass('ticket-inactive');
+                    } else {
+                        row.addClass('ticket-inactive');
+                    }
+                    table.draw(false);
                 },
                 error: function () {
                     alert('Failed to update the ticket status. Please try again.');

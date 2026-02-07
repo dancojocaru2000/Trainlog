@@ -324,6 +324,7 @@
     "ticket_list": "票单",
     "nav_tickets": "票务",
     "ticket_name": "票名",
+    "show_inactive_tickets": "显示非活跃票证",
     "enter_ticket_name": "输入票名",
     "purchasing_date": "购买日期",
     "enter_ticket_price": "输入票价",

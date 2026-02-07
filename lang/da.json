@@ -324,6 +324,7 @@
     "ticket_list": "Billet liste",
     "nav_tickets": "Billetter",
     "ticket_name": "Billetnavn",
+    "show_inactive_tickets": "Vis inaktive billetter",
     "enter_ticket_name": "Indtast billetnavn",
     "purchasing_date": "Købsdato",
     "enter_ticket_price": "Indtast billetpris",

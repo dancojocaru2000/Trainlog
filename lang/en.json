@@ -324,6 +324,7 @@
     "ticket_list": "Ticket List",
     "nav_tickets": "Tickets",
     "ticket_name": "Ticket Name",
+    "show_inactive_tickets": "Show inactive tickets",
     "enter_ticket_name": "Enter ticket name",
     "purchasing_date": "Purchasing Date",
     "enter_ticket_price": "Enter ticket price",

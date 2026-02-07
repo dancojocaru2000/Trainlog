@@ -324,6 +324,7 @@
     "ticket_list": "Bilet Listesi",
     "nav_tickets": "Biletler",
     "ticket_name": "Bilet İsmi",
+    "show_inactive_tickets": "Etkin olmayan biletleri göster",
     "enter_ticket_name": "Bilet ismini girin",
     "purchasing_date": "Satın Alma Tarihi",
     "enter_ticket_price": "Bilet fiyatını girin",

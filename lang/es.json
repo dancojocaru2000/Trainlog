@@ -324,6 +324,7 @@
     "ticket_list": "Lista de Boletos",
     "nav_tickets": "Boletos",
     "ticket_name": "Nombre del Boleto",
+    "show_inactive_tickets": "Mostrar billetes inactivos",
     "enter_ticket_name": "Ingrese el nombre del boleto",
     "purchasing_date": "Fecha de Compra",
     "enter_ticket_price": "Ingrese el precio del boleto",

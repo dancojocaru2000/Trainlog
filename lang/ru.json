@@ -324,6 +324,7 @@
     "ticket_list": "Список Билетов",
     "nav_tickets": "Билеты",
     "ticket_name": "Название Билета",
+    "show_inactive_tickets": "Показать неактивные билеты",
     "enter_ticket_name": "Введите название билета",
     "purchasing_date": "Дата Покупки",
     "enter_ticket_price": "Введите стоимость билета",

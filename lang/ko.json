@@ -324,6 +324,7 @@
     "ticket_list": "티켓 목록",
     "nav_tickets": "티켓",
     "ticket_name": "티켓 이름",
+    "show_inactive_tickets": "비활성 티켓 표시",
     "enter_ticket_name": "티켓 이름 입력",
     "purchasing_date": "구입 일자",
     "enter_ticket_price": "티켓 가격 입력",

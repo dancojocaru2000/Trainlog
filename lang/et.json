@@ -324,6 +324,7 @@
     "ticket_list": "Piletite nimekiri",
     "nav_tickets": "Piletid",
     "ticket_name": "Piletinimi",
+    "show_inactive_tickets": "Kuva mitteaktiivsed piletid",
     "enter_ticket_name": "Sisestage pileti nimi",
     "purchasing_date": "Ostukuupäev",
     "enter_ticket_price": "Sisestage pileti hind",

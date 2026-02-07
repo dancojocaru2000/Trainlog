@@ -324,6 +324,7 @@
     "ticket_list": "Jegylista",
     "nav_tickets": "Jegyek",
     "ticket_name": "Jegy neve",
+    "show_inactive_tickets": "Inaktív jegyek megjelenítése",
     "enter_ticket_name": "Adja meg a jegy nevét",
     "purchasing_date": "Vásárlás dátuma",
     "enter_ticket_price": "Adja meg a jegy árát",
