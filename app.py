@@ -73,6 +73,7 @@ from werkzeug.exceptions import HTTPException
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 import sqlite3
+from urllib.parse import unquote
 
 # Set the working directory to the app root
 # this must be before we try to read the config, or any file
@@ -6714,7 +6715,7 @@ def importAll(username):
     if getUser() not in (username, owner):
         abort(403)
 
-    data = list(request.form.to_dict().items())[0][0]
+    data = unquote(list(request.form.to_dict().items())[0][0])
 
     csvfile = StringIO(data)
     reader = csv.DictReader(csvfile)
@@ -6743,6 +6744,8 @@ def importAll(username):
     dataDict["user_id"] = user_id
     dataDict["ticket_id"] = ""
     # Remove path from main dict
+    from pprint import pprint
+    pprint(dataDict)
     if dataDict.get("path"):
         rawPath = dataDict.pop("path")
 

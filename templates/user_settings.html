@@ -247,7 +247,7 @@
           $.ajax({
             type: "POST",
             url: urls[input],
-            data: input === "trainlogImport" ? lines[0] + "\n" + lines[i] : lines[i], // Send headers alongside data if trainlogImport
+            data: encodeURIComponent(input === "trainlogImport" ? lines[0] + "\n" + lines[i] : lines[i]), // Send headers alongside data if trainlogImport
             error: function (xhr, status, error) {
               console.error("Upload failed:", error);
               // Display the offending line in an alert div
