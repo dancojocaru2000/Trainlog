@@ -100,7 +100,6 @@ def parse_trip_ai(username):
             enriched_trips.append(trip)
     
     parse_id = str(uuid.uuid4())
-    _pending_trips[parse_id] = {"user": username, "trips": enriched_trips}
     
     return jsonify({"parse_id": parse_id, "trips": enriched_trips})
 
@@ -108,47 +107,42 @@ def parse_trip_ai(username):
 @login_required
 def save_trip_ai(username):
     user = User.query.filter_by(username=username).first()
-    
-    data = request.get_json()
-    parse_id = data.get("parse_id")
-    selected = data.get("selected", [])
-    
-    if not parse_id or parse_id not in _pending_trips:
-        return jsonify({"error": "Invalid or expired parse"}), 400
-    
-    pending = _pending_trips[parse_id]
-    if pending["user"] != username:
-        return jsonify({"error": "Unauthorized"}), 403
-    
-    # Check usage limit before saving
-    valid_count = sum(1 for idx in selected if 0 <= idx < len(pending["trips"]) and not pending["trips"][idx].get("_enrich_failed"))
-    if not check_and_increment_ai_usage(username, count=valid_count):
+
+    data = request.get_json(silent=True) or {}
+
+    # NEW: selected trip objects are sent by the frontend
+    selected_trips = data.get("trips", [])
+    if not isinstance(selected_trips, list) or not selected_trips:
+        return jsonify({"error": "No trips provided"}), 400
+
+    # Filter out any invalid / failed enrich payloads
+    valid_trips = [
+        t for t in selected_trips
+        if isinstance(t, dict) and t.get("origin") and t.get("destination") and not t.get("_enrich_failed")
+    ]
+    if not valid_trips:
+        return jsonify({"error": "No valid trips to save"}), 400
+
+    # Check usage limit before saving (count valid trips only)
+    if not check_and_increment_ai_usage(username, count=len(valid_trips)):
         return jsonify({"error": "Monthly limit reached (10 trips). Upgrade to premium for unlimited."}), 403
-    
-    trips = pending["trips"]
+
     created = []
-    
-    for idx in selected:
-        if 0 <= idx < len(trips):
-            trip_data = trips[idx]
-            if trip_data.get("_enrich_failed"):
-                continue
-            try:
-                trip = create_trip_from_parsed(user, trip_data, source="ai")
-                if trip:
-                    created.append({"id": trip.trip_id, "origin": trip.origin_station, "destination": trip.destination_station})
-            except Exception as e:
-                logger.error(f"Failed to create trip: {e}")
-    
-    del _pending_trips[parse_id]
-    
+    for trip_data in valid_trips:
+        try:
+            trip = create_trip_from_parsed(user, trip_data, source="ai")
+            if trip:
+                created.append({
+                    "id": trip.trip_id,
+                    "origin": trip.origin_station,
+                    "destination": trip.destination_station
+                })
+        except Exception as e:
+            logger.error(f"Failed to create trip: {e}")
+
     return jsonify({"count": len(created), "trips": created})
 
 @ai_blueprint.route("/u/<username>/new/ai/cancel", methods=["POST"])
 @login_required
 def cancel_trip_ai(username):
-    data = request.get_json(silent=True) or {}
-    parse_id = data.get("parse_id")
-    if parse_id and parse_id in _pending_trips:
-        del _pending_trips[parse_id]
     return jsonify({"ok": True})

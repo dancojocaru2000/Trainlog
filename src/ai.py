@@ -411,53 +411,85 @@ def create_trip_from_parsed(user, parsed_trip, purchase_date=None, source="ai"):
     trip_type = parsed_trip.get("type", "train")
     now = datetime.now()
 
-    if "_resolved_origin" not in parsed_trip:
+    # If the trip already contains resolved origin/destination/path (e.g. it was
+    # enriched before being sent to the frontend and then posted back on save),
+    # prefer that data to avoid re-geocoding/rerouting.
+    if "_resolved_origin" not in parsed_trip or "_resolved_destination" not in parsed_trip:
         parsed_trip = enrich_parsed_trip(parsed_trip)
         if not parsed_trip:
             return None
+
+    # Normalise path if present (ensure list of {lat,lng})
+    path = parsed_trip.get("_path")
+    if isinstance(path, list) and path and isinstance(path[0], dict) and "lat" in path[0] and "lng" in path[0]:
+        resolved_path = path
+    else:
+        resolved_path = None
     
+    # Use resolved data if available.
     if trip_type == "air":
-        origin_iata = parsed_trip.get("origin_iata")
-        dest_iata = parsed_trip.get("destination_iata")
-        origin_airport = get_airport_by_iata(origin_iata) if origin_iata else None
-        dest_airport = get_airport_by_iata(dest_iata) if dest_iata else None
-        
-        if not origin_airport or not dest_airport:
-            logger.error(f"Could not find airports: {origin_iata}, {dest_iata}")
-            return None
-        
-        origin_flag = get_flag_emoji(origin_airport["iso_country"])
-        dest_flag = get_flag_emoji(dest_airport["iso_country"])
-        origin_station = f"{origin_flag} {origin_airport['name']} ({origin_iata.upper()})"
-        dest_station = f"{dest_flag} {dest_airport['name']} ({dest_iata.upper()})"
-        path = [{"lat": origin_airport["latitude"], "lng": origin_airport["longitude"]}, {"lat": dest_airport["latitude"], "lng": dest_airport["longitude"]}]
-        
-        trip_length = getDistance(path[0], path[-1])
+        origin_station = parsed_trip.get("_resolved_origin")
+        dest_station = parsed_trip.get("_resolved_destination")
+        origin_point = parsed_trip.get("_origin_coords")
+        dest_point = parsed_trip.get("_dest_coords")
+
+        if not origin_station or not dest_station or not origin_point or not dest_point:
+            # Fallback to airport lookup if required fields are missing
+            origin_iata = parsed_trip.get("origin_iata")
+            dest_iata = parsed_trip.get("destination_iata")
+            origin_airport = get_airport_by_iata(origin_iata) if origin_iata else None
+            dest_airport = get_airport_by_iata(dest_iata) if dest_iata else None
+            if not origin_airport or not dest_airport:
+                logger.error(f"Could not find airports: {origin_iata}, {dest_iata}")
+                return None
+            origin_flag = get_flag_emoji(origin_airport["iso_country"])
+            dest_flag = get_flag_emoji(dest_airport["iso_country"])
+            origin_station = f"{origin_flag} {origin_airport['name']} ({origin_iata.upper()})"
+            dest_station = f"{dest_flag} {dest_airport['name']} ({dest_iata.upper()})"
+            origin_point = {"lat": origin_airport["latitude"], "lng": origin_airport["longitude"]}
+            dest_point = {"lat": dest_airport["latitude"], "lng": dest_airport["longitude"]}
+
+        path = resolved_path if resolved_path else [origin_point, dest_point]
+        trip_length = parsed_trip.get("_distance") or getDistance(path[0], path[-1])
+
+        # Split distance between origin/destination country (keeps prior behavior)
         origin_country = getCountryFromCoordinates(path[0]["lat"], path[0]["lng"])
         dest_country = getCountryFromCoordinates(path[-1]["lat"], path[-1]["lng"])
-        countries = json.dumps({origin_country["countryCode"]: trip_length / 2, dest_country["countryCode"]: trip_length / 2})
+        countries = json.dumps({
+            origin_country.get("countryCode", ""): trip_length / 2,
+            dest_country.get("countryCode", ""): trip_length / 2
+        })
         material_type = parsed_trip.get("aircraft_icao")
     else:
-        origin_fallback = (parsed_trip["origin_lat"], parsed_trip["origin_lng"]) if parsed_trip.get("origin_lat") and parsed_trip.get("origin_lng") else None
-        dest_fallback = (parsed_trip["destination_lat"], parsed_trip["destination_lng"]) if parsed_trip.get("destination_lat") and parsed_trip.get("destination_lng") else None
-        
-        origin_geo = geocode_station(parsed_trip["origin"], trip_type, origin_fallback)
-        dest_geo = geocode_station(parsed_trip["destination"], trip_type, dest_fallback)
-        
-        if not origin_geo or not dest_geo:
-            logger.error(f"Could not geocode: {parsed_trip['origin']}, {parsed_trip['destination']}")
-            return None
-        
-        origin_flag = get_flag_emoji(origin_geo["country_code"])
-        dest_flag = get_flag_emoji(dest_geo["country_code"])
-        origin_station = f"{origin_flag} {origin_geo['name']}"
-        dest_station = f"{dest_flag} {dest_geo['name']}"
-        origin_point = {"lat": origin_geo["lat"], "lng": origin_geo["lng"]}
-        dest_point = {"lat": dest_geo["lat"], "lng": dest_geo["lng"]}
-        
-        routed_path = route_path(origin_point, dest_point, trip_type)
-        path = routed_path if routed_path else [origin_point, dest_point]
-        trip_length = getDistance(path[0], path[-1])
+        origin_station = parsed_trip.get("_resolved_origin")
+        dest_station = parsed_trip.get("_resolved_destination")
+        origin_point = parsed_trip.get("_origin_coords")
+        dest_point = parsed_trip.get("_dest_coords")
+
+        if not origin_station or not dest_station or not origin_point or not dest_point:
+            # Fallback to geocoding if required fields are missing
+            origin_fallback = (parsed_trip["origin_lat"], parsed_trip["origin_lng"]) if parsed_trip.get("origin_lat") and parsed_trip.get("origin_lng") else None
+            dest_fallback = (parsed_trip["destination_lat"], parsed_trip["destination_lng"]) if parsed_trip.get("destination_lat") and parsed_trip.get("destination_lng") else None
+
+            origin_geo = geocode_station(parsed_trip.get("origin", ""), trip_type, origin_fallback)
+            dest_geo = geocode_station(parsed_trip.get("destination", ""), trip_type, dest_fallback)
+            if not origin_geo or not dest_geo:
+                logger.error(f"Could not geocode: {parsed_trip.get('origin')}, {parsed_trip.get('destination')}")
+                return None
+            origin_flag = get_flag_emoji(origin_geo["country_code"])
+            dest_flag = get_flag_emoji(dest_geo["country_code"])
+            origin_station = f"{origin_flag} {origin_geo['name']}"
+            dest_station = f"{dest_flag} {dest_geo['name']}"
+            origin_point = {"lat": origin_geo["lat"], "lng": origin_geo["lng"]}
+            dest_point = {"lat": dest_geo["lat"], "lng": dest_geo["lng"]}
+
+        if resolved_path:
+            path = resolved_path
+        else:
+            routed_path = route_path(origin_point, dest_point, trip_type)
+            path = routed_path if routed_path else [origin_point, dest_point]
+
+        trip_length = parsed_trip.get("_distance") or getDistance(path[0], path[-1])
         countries = "{}"
         material_type = None
     

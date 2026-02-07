@@ -194,7 +194,7 @@ $('#parseForm').on('submit', function(e) {
     processData: false,
     contentType: false,
     success: function(response) {
-      parseId = response.parse_id;
+      parseId = response.parse_id || null;
       tripsData = response.trips;
       renderTrips(tripsData);
       $('#inputSection').addClass('d-none');
@@ -274,12 +274,10 @@ function resetForm() {
 }
 
 $('#backBtn').on('click', function() {
-  if (parseId) $.post(URLS.cancel, JSON.stringify({parse_id: parseId}), null, 'json');
   resetForm();
 });
 
 $('#cancelBtn').on('click', function() {
-  if (parseId) $.post(URLS.cancel, JSON.stringify({parse_id: parseId}), null, 'json');
   resetForm();
 });
 
@@ -302,7 +300,11 @@ $('#saveBtn').on('click', function() {
     url: URLS.save,
     type: 'POST',
     contentType: 'application/json',
-    data: JSON.stringify({parse_id: parseId, selected: selected}),
+    data: JSON.stringify({
+      trips: selected
+        .map(i => tripsData[i])
+        .filter(t => t && !t._enrich_failed)
+    }),
     success: function(response) {
       const ids = response.trips.map(t => t.id);
       const links = response.trips.map(t => 
