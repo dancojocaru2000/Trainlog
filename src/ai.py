@@ -8,7 +8,7 @@ from io import BytesIO
 from pypdf import PdfReader
 from icalendar import Calendar
 
-from py.utils import load_config, getCountryFromCoordinates, get_flag_emoji, getDistance
+from py.utils import load_config, getCountryFromCoordinates, get_flag_emoji, getDistance, getCountriesFromPath
 from src.trips import Trip, create_trip
 from src.routing import forward_routing_core
 from src.utils import get_default_trip_visibility, pathConn, managed_cursor
@@ -490,7 +490,17 @@ def create_trip_from_parsed(user, parsed_trip, purchase_date=None, source="ai"):
             path = routed_path if routed_path else [origin_point, dest_point]
 
         trip_length = parsed_trip.get("_distance") or getDistance(path[0], path[-1])
-        countries = "{}"
+        if trip_type in ("air", "helicopter"):
+            countries = {}
+            countries[getCountryFromCoordinates(path[0])["countryCode"]] = (
+                trip_length / 2
+            )
+            countries[getCountryFromCoordinates(path[-1])["countryCode"]] = (
+                trip_length / 2
+            )
+            countries = json.dumps(countries)
+        else:
+            countries = getCountriesFromPath(path, trip_type, None, None)
         material_type = None
     
     tf = TimezoneFinder()
